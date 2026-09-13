@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collins Kiragu — Private Tutor & Maths Professor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+
+  <!-- Custom Cursor — COMMENTED OUT, using browser default cursor instead
+  <div id="cursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+    <span class="cursor-label"></span>
+  </div>
+  -->
+
+  <!-- ══════════════════════════════════════════
+       LOADING SCREEN
+  ══════════════════════════════════════════ -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-name">Collins Kiragu</div>
+      <div class="loader-role">PRIVATE TUTOR &nbsp;•&nbsp; Maths Professor &nbsp;•&nbsp; MENTOR</div>
+      <canvas id="loader-canvas"></canvas>
+
+      <!-- Scene info panel — typed equation + description + quote -->
+      <div class="loader-scene-info" id="loader-scene-info">
+        <div class="loader-scene-name"   id="loader-scene-name"></div>
+        <div class="loader-equation"     id="loader-equation-text"></div>
+        <div class="loader-description"  id="loader-description"></div>
+        <div class="loader-quote"        id="loader-quote"></div>
+        <div class="loader-scene-dots"   id="loader-scene-dots">
+          <span class="ldot active"></span>
+          <span class="ldot"></span>
+          <span class="ldot"></span>
+          <span class="ldot"></span>
+          <span class="ldot"></span>
+        </div>
+      </div>
+      <button class="loader-enter" id="loader-enter">ENTER</button>
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       FLOATING NAVIGATION
+  ══════════════════════════════════════════ -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#hero">AM</a>
+      <ul class="nav-links">
+        <li><a href="#hero"    data-section="hero">Home</a></li>
+        <li><a href="#about"   data-section="about">About</a></li>
+        <li><a href="#subjects" data-section="subjects">Subjects</a></li>
+        <li><a href="#results" data-section="results">Results</a></li>
+        <li><a href="#desk"    data-section="desk">Experience</a></li>
+        <li><a href="#contact" data-section="contact">Contact</a></li>
+      </ul>
+      <div class="nav-progress">
+        <div class="nav-progress-fill"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       HERO
+  ══════════════════════════════════════════ -->
+  <section id="hero" class="section section--hero">
+    <div class="hero-content">
+      <p class="eyebrow reveal-text">PRIVATE TUTOR &nbsp;•&nbsp; Maths Professor &nbsp;•&nbsp; MENTOR</p>
+      <h1 class="hero-headline reveal-text">
+        Building Minds<br />
+        <em>That Think Beyond</em><br />
+        the Classroom.
+      </h1>
+      <p class="hero-sub reveal-text">
+        Personalised, rigorous tutoring in Mathematics, Computer Science, Business Studies and All Sciences.
+        Tailored to each student. Built for lasting results.
+      </p>
+      <div class="hero-ctas reveal-text">
+        <a href="#booking" class="btn btn--primary magnetic">Book a Session</a>
+        <a href="#subjects" class="btn btn--ghost magnetic">Explore My Work</a>
+      </div>
+    </div>
+    <div class="hero-3d">
+      <canvas id="hero-canvas"></canvas>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TRUST / STATISTICS
+  ══════════════════════════════════════════ -->
+  <section id="stats" class="section section--stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" data-target="94" data-suffix="%">0</span>
+          <p class="stat-label">Students achieving target grade</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="2.3" data-prefix="+" data-decimal>0</span>
+          <p class="stat-label">Average grade improvement</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="500" data-suffix="+">0</span>
+          <p class="stat-label">Students taught</p>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="8" data-suffix="+">0</span>
+          <p class="stat-label">Years teaching</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ABOUT THE TUTOR
+  ══════════════════════════════════════════ -->
+  <section id="about" class="section section--about">
+    <div class="container">
+      <div class="section-label reveal-text">About the Tutor</div>
+      <h2 class="section-title reveal-text">Meet the Maths Professor<br /><em>Behind the Results</em></h2>
+
+      <div class="about-grid">
+        <!-- Profile Card -->
+        <div class="about-card-wrap">
+          <div class="profile-card" id="profile-card">
+            <div class="profile-card-inner">
+              <div class="profile-card-front">
+                <div class="profile-avatar">AM</div>
+                <h3>Collins Kiragu</h3>
+                <p class="profile-title">Mathematics &amp; Physics Professor</p>
+                <p class="profile-exp">8+ Years Experience</p>
+                <div class="profile-subjects">
+                  <span>Mathematics</span>
+                  <span>Physics</span>
+                  <span>Chemistry</span>
+                </div>
+                <p class="profile-flip-hint">Hover to reveal</p>
+              </div>
+              <div class="profile-card-back">
+                <h4>Qualifications</h4>
+                <ul>
+                  <li>BSc Mathematics, University of Edinburgh</li>
+                  <li>MSc Applied Mathematics, Imperial College</li>
+                  <li>Qualified Teacher Status (QTS)</li>
+                  <li>Cambridge CELTA Certified</li>
+                </ul>
+                <h4>Teaching Philosophy</h4>
+                <p>"Every student has a unique path to understanding. My role is to find it."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bio + Timeline -->
+        <div class="about-bio">
+          <p class="about-intro reveal-text">
+            I am a Professor and private tutor with over eight years of experience helping students at all
+            levels unlock their potential in Mathematics, Computer Science, Economics, and the Sciences. My approach combines
+            conceptual depth with personalised strategy — building not just exam results, but independent
+            thinkers.
+          </p>
+
+          <div class="timeline" id="timeline">
+            <div class="timeline-track">
+              <div class="timeline-node active" data-year="2018">
+                <span class="timeline-year">2018</span>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <strong>Founded independent tutoring practice.</strong>
+                  First cohort of 12 students, 100% pass rate.
+                </div>
+              </div>
+              <div class="timeline-node" data-year="2020">
+                <span class="timeline-year">2020</span>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <strong>Expanded to online learning.</strong>
+                  Developed fully interactive virtual curriculum.
+                </div>
+              </div>
+              <div class="timeline-node" data-year="2022">
+                <span class="timeline-year">2022</span>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <strong>Developed personalised learning methodology.</strong>
+                  Advanced mathematics diagnostic framework.
+                </div>
+              </div>
+              <div class="timeline-node" data-year="2024">
+                <span class="timeline-year">2024</span>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <strong>500th student milestone.</strong>
+                  Published open-access study guides used by 3,000+ students.
+                </div>
+              </div>
+              <div class="timeline-node" data-year="2026">
+                <span class="timeline-year">2026</span>
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                  <strong>Present.</strong>
+                  Selective intake, premium personalised sessions.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SUBJECTS
+  ══════════════════════════════════════════ -->
+  <section id="subjects" class="section section--subjects">
+    <div class="container">
+      <div class="section-label reveal-text">Areas of Expertise</div>
+      <h2 class="section-title reveal-text">Subjects I Teach</h2>
+      <p class="section-sub reveal-text">Each subject is approached with rigour, depth, and a tailored strategy.</p>
+
+      <div class="subjects-grid" id="subjects-grid">
+        <div class="subject-card" data-subject="mathematics">
+          <div class="subject-canvas-wrap">
+            <canvas class="subject-canvas" id="canvas-math"></canvas>
+          </div>
+          <div class="subject-info">
+            <h3>Mathematics</h3>
+            <p>Algebra · Calculus · Geometry · Statistics</p>
+          </div>
+          <div class="subject-panel">
+            <button class="subject-panel-close">✕</button>
+            <h3>Mathematics</h3>
+            <ul>
+              <li>Algebra &amp; Functions</li>
+              <li>Calculus (Differential &amp; Integral)</li>
+              <li>Geometry &amp; Trigonometry</li>
+              <li>Statistics &amp; Probability</li>
+              <li>Exam Preparation (A-Level, IB, SAT)</li>
+            </ul>
+            <a href="#booking" class="btn btn--primary">Book Mathematics →</a>
+          </div>
+        </div>
+
+        <div class="subject-card" data-subject="physics">
+          <div class="subject-canvas-wrap">
+            <canvas class="subject-canvas" id="canvas-physics"></canvas>
+          </div>
+          <div class="subject-info">
+            <h3>Physics</h3>
+            <p>Mechanics · Waves · Electromagnetism</p>
+          </div>
+          <div class="subject-panel">
+            <button class="subject-panel-close">✕</button>
+            <h3>Physics</h3>
+            <ul>
+              <li>Classical Mechanics</li>
+              <li>Waves &amp; Optics</li>
+              <li>Electromagnetism</li>
+              <li>Quantum Foundations</li>
+              <li>Exam Preparation (A-Level, IB)</li>
+            </ul>
+            <a href="#booking" class="btn btn--primary">Book Physics →</a>
+          </div>
+        </div>
+
+        <div class="subject-card" data-subject="chemistry">
+          <div class="subject-canvas-wrap">
+            <canvas class="subject-canvas" id="canvas-chem"></canvas>
+          </div>
+          <div class="subject-info">
+            <h3>Chemistry</h3>
+            <p>Organic · Physical · Inorganic</p>
+          </div>
+          <div class="subject-panel">
+            <button class="subject-panel-close">✕</button>
+            <h3>Chemistry</h3>
+            <ul>
+              <li>Organic Chemistry</li>
+              <li>Physical Chemistry</li>
+              <li>Inorganic Chemistry</li>
+              <li>Practical Techniques</li>
+              <li>Exam Preparation (A-Level, IB)</li>
+            </ul>
+            <a href="#booking" class="btn btn--primary">Book Chemistry →</a>
+          </div>
+        </div>
+
+        <div class="subject-card" data-subject="cs">
+          <div class="subject-canvas-wrap">
+            <canvas class="subject-canvas" id="canvas-cs"></canvas>
+          </div>
+          <div class="subject-info">
+            <h3>Computer Science</h3>
+            <p>Algorithms · Data Structures · Python</p>
+          </div>
+          <div class="subject-panel">
+            <button class="subject-panel-close">✕</button>
+            <h3>Computer Science</h3>
+            <ul>
+              <li>Algorithms &amp; Complexity</li>
+              <li>Data Structures</li>
+              <li>Python &amp; Java</li>
+              <li>Computational Thinking</li>
+              <li>Exam Preparation (GCSE, A-Level)</li>
+            </ul>
+            <a href="#booking" class="btn btn--primary">Book CS →</a>
+          </div>
+        </div>
+
+        <div class="subject-card" data-subject="economics">
+          <div class="subject-canvas-wrap">
+            <canvas class="subject-canvas" id="canvas-econ"></canvas>
+          </div>
+          <div class="subject-info">
+            <h3>Economics</h3>
+            <p>Micro · Macro · Econometrics</p>
+          </div>
+          <div class="subject-panel">
+            <button class="subject-panel-close">✕</button>
+            <h3>Economics</h3>
+            <ul>
+              <li>Microeconomics &amp; Market Theory</li>
+              <li>Macroeconomics &amp; Policy</li>
+              <li>Econometrics &amp; Data Analysis</li>
+              <li>Mathematical Economics</li>
+              <li>Exam Preparation (A-Level, IB)</li>
+            </ul>
+            <a href="#booking" class="btn btn--primary">Book Economics →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TEACHING METHODOLOGY
+  ══════════════════════════════════════════ -->
+  <section id="methodology" class="section section--methodology">
+    <div class="container">
+      <div class="section-label reveal-text">Process</div>
+      <h2 class="section-title reveal-text">How I Teach</h2>
+      <p class="section-sub reveal-text">A proven six-stage methodology that builds genuine mastery — not just exam scores.</p>
+    </div>
+    <div class="methodology-journey">
+      <div class="method-step" data-step="1">
+        <div class="method-number">01</div>
+        <div class="method-icon">◉</div>
+        <h3>Diagnose</h3>
+        <p>Understand the student's current level, gaps, goals, and learning style.</p>
+      </div>
+      <div class="method-connector"></div>
+      <div class="method-step" data-step="2">
+        <div class="method-number">02</div>
+        <div class="method-icon">◈</div>
+        <h3>Plan</h3>
+        <p>Build a personalised roadmap with milestones and targeted resources.</p>
+      </div>
+      <div class="method-connector"></div>
+      <div class="method-step" data-step="3">
+        <div class="method-number">03</div>
+        <div class="method-icon">◆</div>
+        <h3>Teach</h3>
+        <p>Interactive conceptual learning — first principles, then application.</p>
+      </div>
+      <div class="method-connector"></div>
+      <div class="method-step" data-step="4">
+        <div class="method-number">04</div>
+        <div class="method-icon">◇</div>
+        <h3>Practice</h3>
+        <p>Targeted exercises calibrated to difficulty, timed under exam conditions.</p>
+      </div>
+      <div class="method-connector"></div>
+      <div class="method-step" data-step="5">
+        <div class="method-number">05</div>
+        <div class="method-icon">○</div>
+        <h3>Evaluate</h3>
+        <p>Measure progress against the roadmap. Adjust strategy in real time.</p>
+      </div>
+      <div class="method-connector"></div>
+      <div class="method-step" data-step="6">
+        <div class="method-number">06</div>
+        <div class="method-icon">★</div>
+        <h3>Master</h3>
+        <p>Build independent thinkers who no longer need me — the highest goal.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       TUTOR'S DESK — Entry Card (Option B)
+       Full classroom opens as overlay
+  ══════════════════════════════════════════ -->
+  <section id="desk" class="section section--desk">
+    <div class="container">
+      <div class="section-label reveal-text">Explore</div>
+      <h2 class="section-title reveal-text">The Tutor's Desk</h2>
+      <p class="section-sub reveal-text">Step inside the classroom. Explore subjects, click objects, walk around.</p>
+    </div>
+
+    <!-- Entry card — clicking opens the full-screen classroom -->
+    <div class="classroom-entry" id="classroom-entry">
+      <div class="classroom-entry-inner">
+        <div class="classroom-entry-icon">🏫</div>
+        <h3 class="classroom-entry-title">Enter the Virtual Classroom</h3>
+        <p class="classroom-entry-desc">
+          A fully interactive 3D classroom. Click subjects on the whiteboard,
+          explore books and instruments on the desk, and switch to first-person
+          mode to walk around freely.
+        </p>
+        <div class="classroom-entry-tags">
+          <span>📐 Mathematics</span>
+          <span>⚛ Sciences</span>
+          <span>💻 Computer Science</span>
+          <span>📊 Economics</span>
+        </div>
+        <button class="btn btn--primary btn--lg magnetic" id="open-classroom">
+          Enter Classroom →
+        </button>
+      </div>
+      <!-- Preview thumbnail strip -->
+      <div class="classroom-preview-strip">
+        <div class="cp-item">🖥 Interactive Whiteboard</div>
+        <div class="cp-item">📚 Clickable Books</div>
+        <div class="cp-item">🚶 First-Person Mode</div>
+        <div class="cp-item">🎓 Subject Portals</div>
+        <div class="cp-item">❓ Quizzes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CLASSROOM OVERLAY — full-screen immersive
+  ══════════════════════════════════════════ -->
+  <div id="classroom-overlay" class="classroom-overlay" aria-modal="true" role="dialog">
+
+    <!-- Three.js renders here -->
+    <canvas id="classroom-canvas"></canvas>
+
+    <!-- HUD: brand + instructions -->
+    <div class="cls-hud">
+      <div class="cls-brand">
+        <div class="cls-brand-title">THE TUTOR'S DESK</div>
+        <div class="cls-brand-sub">Mathematics · Sciences · Computer Science · Economics</div>
+      </div>
+      <div class="cls-instructions" id="cls-instructions">
+        <strong>Explore the classroom</strong><br>
+        Drag to look around &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Click objects to learn &nbsp;·&nbsp; Press <kbd>?</kbd> for all controls
+      </div>
+    </div>
+
+    <!-- Mode toggle: orbit ↔ first-person -->
+    <div class="cls-mode-bar">
+      <button class="cls-mode-btn active" id="cls-orbit-btn" title="Orbit mode">
+        🔭 Orbit
+      </button>
+      <button class="cls-mode-btn" id="cls-fp-btn" title="First-person mode">
+        🚶 Walk
+      </button>
+      <button class="cls-close-btn" id="cls-close" title="Close classroom">✕</button>
+    </div>
+
+    <!-- First-person crosshair -->
+    <div class="cls-crosshair" id="cls-crosshair">+</div>
+
+    <!-- Subject info panel (slides in from right on object click) -->
+    <div class="cls-panel" id="cls-panel">
+      <button class="cls-panel-close" id="cls-panel-close">×</button>
+      <div class="cls-panel-icon" id="cls-panel-icon">📚</div>
+      <h2 class="cls-panel-title" id="cls-panel-title">Welcome</h2>
+      <p class="cls-panel-text" id="cls-panel-text">
+        Explore the classroom and click any object to learn more.
+      </p>
+      <!-- Quiz section (Phase 3) -->
+      <div class="cls-quiz" id="cls-quiz" style="display:none">
+        <h4 class="cls-quiz-title" id="cls-quiz-title">Quick Quiz</h4>
+        <div class="cls-quiz-body" id="cls-quiz-body"></div>
+      </div>
+      <button class="cls-panel-action" id="cls-panel-action">Explore Subject →</button>
+    </div>
+
+    <!-- Subject portal overlay (zooms in on whiteboard click) -->
+    <div class="cls-portal" id="cls-portal">
+      <div class="cls-portal-inner" id="cls-portal-inner"></div>
+      <button class="cls-portal-back" id="cls-portal-back">← Back to Classroom</button>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STUDENT RESULTS
+  ══════════════════════════════════════════ -->
+  <section id="results" class="section section--results">
+    <div class="container">
+      <div class="section-label reveal-text">Outcomes</div>
+      <h2 class="section-title reveal-text">Student Results</h2>
+      <p class="section-sub reveal-text">Evidence over words. Every number represents a real student journey.</p>
+    </div>
+
+    <div class="testimonials-container">
+      <div class="testimonial-card tilt-card">
+        <div class="testimonial-card-inner">
+          <div class="testimonial-front">
+            <div class="testimonial-avatar">S.K.</div>
+            <div class="testimonial-subject">Mathematics · A-Level</div>
+            <p class="testimonial-quote">"I went from a D to an A* in six months. Collins's approach is unlike anything I'd experienced before."</p>
+            <div class="testimonial-result">D → A*</div>
+            <p class="testimonial-hint">Click to see full story</p>
+          </div>
+          <div class="testimonial-back">
+            <table class="testimonial-details">
+              <tr><td>Starting Grade</td><td><strong>D</strong></td></tr>
+              <tr><td>Target Grade</td><td><strong>A*</strong></td></tr>
+              <tr><td>Duration</td><td><strong>6 months</strong></td></tr>
+              <tr><td>Final Result</td><td><strong>A*</strong></td></tr>
+            </table>
+            <p>"The diagnostic approach identified exactly where I was losing marks. We fixed each one systematically." — S.K.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card tilt-card">
+        <div class="testimonial-card-inner">
+          <div class="testimonial-front">
+            <div class="testimonial-avatar">J.P.</div>
+            <div class="testimonial-subject">Physics · IB HL</div>
+            <p class="testimonial-quote">"Collins made complex mechanics concepts click in a way two years of school never had."</p>
+            <div class="testimonial-result">4 → 7</div>
+            <p class="testimonial-hint">Click to see full story</p>
+          </div>
+          <div class="testimonial-back">
+            <table class="testimonial-details">
+              <tr><td>Starting Score</td><td><strong>4/7</strong></td></tr>
+              <tr><td>Target Score</td><td><strong>6/7</strong></td></tr>
+              <tr><td>Duration</td><td><strong>4 months</strong></td></tr>
+              <tr><td>Final Result</td><td><strong>7/7</strong></td></tr>
+            </table>
+            <p>"Visual explanations and real-world applications made all the difference." — J.P.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card tilt-card">
+        <div class="testimonial-card-inner">
+          <div class="testimonial-front">
+            <div class="testimonial-avatar">M.R.</div>
+            <div class="testimonial-subject">Chemistry · A-Level</div>
+            <p class="testimonial-quote">"I was ready to drop Chemistry. Three months later I got an A."</p>
+            <div class="testimonial-result">E → A</div>
+            <p class="testimonial-hint">Click to see full story</p>
+          </div>
+          <div class="testimonial-back">
+            <table class="testimonial-details">
+              <tr><td>Starting Grade</td><td><strong>E</strong></td></tr>
+              <tr><td>Target Grade</td><td><strong>C</strong></td></tr>
+              <tr><td>Duration</td><td><strong>3 months</strong></td></tr>
+              <tr><td>Final Result</td><td><strong>A</strong></td></tr>
+            </table>
+            <p>"The organic chemistry framework Collins built for me saved my predicted grade." — M.R.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CASE STUDIES
+  ══════════════════════════════════════════ -->
+  <section id="case-studies" class="section section--case-studies">
+    <div class="container">
+      <div class="section-label reveal-text">Case Studies</div>
+      <h2 class="section-title reveal-text">Student Journeys</h2>
+      <p class="section-sub reveal-text">Detailed breakdowns of real transformations.</p>
+
+      <div class="case-studies-list">
+
+        <div class="case-study reveal-up">
+          <div class="case-study-header">
+            <span class="case-number">01</span>
+            <h3>From C → A in 14 Weeks</h3>
+            <span class="case-subject">A-Level Mathematics</span>
+          </div>
+          <div class="case-study-body">
+            <div class="case-col">
+              <h4>Challenge</h4>
+              <p>Student struggled with calculus and abstract problem-solving under exam pressure. Foundational gaps in algebraic manipulation.</p>
+            </div>
+            <div class="case-col">
+              <h4>Strategy</h4>
+              <p>Personalised weekly curriculum. Targeted past paper practice. Real-time feedback on method, not just answers.</p>
+            </div>
+            <div class="case-col">
+              <h4>Outcome</h4>
+              <p>Final assessment: <strong>A</strong>. Student went on to read Engineering at UCL.</p>
+            </div>
+          </div>
+          <div class="progress-slider">
+            <div class="progress-track">
+              <div class="progress-before">
+                <span>Before</span>
+                <div class="grade-bar" style="--pct: 50%"><div class="grade-fill"></div></div>
+                <strong>Grade C</strong>
+              </div>
+              <div class="progress-divider">
+                <div class="progress-handle" data-draggable></div>
+              </div>
+              <div class="progress-after">
+                <span>After</span>
+                <div class="grade-bar" style="--pct: 90%"><div class="grade-fill"></div></div>
+                <strong>Grade A</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-study reveal-up">
+          <div class="case-study-header">
+            <span class="case-number">02</span>
+            <h3>IB Physics: 4 → 7 in One Term</h3>
+            <span class="case-subject">IB Higher Level Physics</span>
+          </div>
+          <div class="case-study-body">
+            <div class="case-col">
+              <h4>Challenge</h4>
+              <p>Mechanics and electromagnetism both weak. Student lacked confidence with vector problems and unit analysis.</p>
+            </div>
+            <div class="case-col">
+              <h4>Strategy</h4>
+              <p>First-principles approach. Built physical intuition before introducing mathematical formalism.</p>
+            </div>
+            <div class="case-col">
+              <h4>Outcome</h4>
+              <p>Final IB score: <strong>7/7</strong>. Exceeded own target by one full grade.</p>
+            </div>
+          </div>
+          <div class="progress-slider">
+            <div class="progress-track">
+              <div class="progress-before">
+                <span>Before</span>
+                <div class="grade-bar" style="--pct: 45%"><div class="grade-fill"></div></div>
+                <strong>Score 4/7</strong>
+              </div>
+              <div class="progress-divider">
+                <div class="progress-handle" data-draggable></div>
+              </div>
+              <div class="progress-after">
+                <span>After</span>
+                <div class="grade-bar" style="--pct: 100%"><div class="grade-fill"></div></div>
+                <strong>Score 7/7</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-study reveal-up">
+          <div class="case-study-header">
+            <span class="case-number">03</span>
+            <h3>Chemistry Rescue — E to A in 12 Weeks</h3>
+            <span class="case-subject">A-Level Chemistry</span>
+          </div>
+          <div class="case-study-body">
+            <div class="case-col">
+              <h4>Challenge</h4>
+              <p>Student at risk of failing. Organic chemistry completely lost. Low exam technique and confidence.</p>
+            </div>
+            <div class="case-col">
+              <h4>Strategy</h4>
+              <p>Structured organic chemistry framework. Targeted mock exams with mark-scheme training.</p>
+            </div>
+            <div class="case-col">
+              <h4>Outcome</h4>
+              <p>Final assessment: <strong>A</strong>. Target was C. Exceeded expectations by two grades.</p>
+            </div>
+          </div>
+          <div class="progress-slider">
+            <div class="progress-track">
+              <div class="progress-before">
+                <span>Before</span>
+                <div class="grade-bar" style="--pct: 25%"><div class="grade-fill"></div></div>
+                <strong>Grade E</strong>
+              </div>
+              <div class="progress-divider">
+                <div class="progress-handle" data-draggable></div>
+              </div>
+              <div class="progress-after">
+                <span>After</span>
+                <div class="grade-bar" style="--pct: 90%"><div class="grade-fill"></div></div>
+                <strong>Grade A</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       ACADEMIC PORTFOLIO / BOOKSHELF
+  ══════════════════════════════════════════ -->
+  <section id="portfolio" class="section section--portfolio">
+    <div class="container">
+      <div class="section-label reveal-text">Portfolio</div>
+      <h2 class="section-title reveal-text">Academic Projects</h2>
+      <p class="section-sub reveal-text">Teaching materials, curricula, and research — click a book to explore.</p>
+    </div>
+    <div class="bookshelf" id="bookshelf">
+      <div class="book-item tilt-card" data-project="calculus">
+        <div class="book-spine"><span>Calculus Mastery</span></div>
+        <div class="book-panel">
+          <h3>Calculus Mastery</h3>
+          <p class="book-type">Interactive Curriculum</p>
+          <p>A complete A-Level calculus course built from first principles. Used by 1,200+ students.</p>
+          <button class="btn btn--ghost btn--sm view-project-btn" data-project="calculus">View Project →</button>
+        </div>
+      </div>
+      <div class="book-item tilt-card" data-project="physics">
+        <div class="book-spine"><span>Physics Fundamentals</span></div>
+        <div class="book-panel">
+          <h3>Physics Fundamentals</h3>
+          <p class="book-type">Student Learning Program</p>
+          <p>Mechanics and electromagnetism taught through visual models and interactive problem sets.</p>
+          <button class="btn btn--ghost btn--sm view-project-btn" data-project="physics">View Project →</button>
+        </div>
+      </div>
+      <div class="book-item tilt-card" data-project="exam">
+        <div class="book-spine"><span>Exam Preparation</span></div>
+        <div class="book-panel">
+          <h3>Exam Preparation System</h3>
+          <p class="book-type">Framework &amp; Resource Pack</p>
+          <p>A structured system covering question technique, timing strategy, and mark-scheme analysis.</p>
+          <button class="btn btn--ghost btn--sm view-project-btn" data-project="exam">View Project →</button>
+        </div>
+      </div>
+      <div class="book-item tilt-card" data-project="organic">
+        <div class="book-spine"><span>Organic Chemistry</span></div>
+        <div class="book-panel">
+          <h3>Organic Chemistry Framework</h3>
+          <p class="book-type">Visual Study Guide</p>
+          <p>Reaction mechanisms mapped visually. Students report a 40% improvement in organic chemistry marks.</p>
+          <button class="btn btn--ghost btn--sm view-project-btn" data-project="organic">View Project →</button>
+        </div>
+      </div>
+      <div class="book-item tilt-card" data-project="thinking">
+        <div class="book-spine"><span>Critical Thinking</span></div>
+        <div class="book-panel">
+          <h3>Critical Thinking in STEM</h3>
+          <p class="book-type">Methodology Paper</p>
+          <p>How to teach students to construct and evaluate mathematical and scientific arguments.</p>
+          <button class="btn btn--ghost btn--sm view-project-btn" data-project="thinking">View Project →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FLIPBOOK MODAL
+       Mirrors the react-pageflip / FlipbookViewer
+       approach from the Tutoring System, implemented
+       in vanilla CSS 3D + GSAP (no React needed)
+  ══════════════════════════════════════════ -->
+  <div class="flipbook-overlay" id="flipbook-overlay" aria-modal="true" role="dialog">
+    <div class="flipbook-container" id="flipbook-container">
+
+      <!-- Header bar (mirrors ResourceViewer header) -->
+      <div class="flipbook-header">
+        <div class="flipbook-title-wrap">
+          <span class="flipbook-icon">📖</span>
+          <div>
+            <p class="flipbook-title" id="flipbook-title">Project Title</p>
+            <p class="flipbook-subtitle" id="flipbook-subtitle">Category</p>
+          </div>
+        </div>
+        <button class="flipbook-close" id="flipbook-close" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Open book scene — engine builds slide track here at runtime -->
+      <div class="flipbook-scene" id="flipbook-scene"></div>
+
+      <!-- Controls (mirrors FlipbookViewer controls bar) -->
+      <div class="flipbook-controls">
+        <button class="flipbook-nav-btn" id="flipbook-prev" aria-label="Previous page">‹</button>
+        <span class="flipbook-page-counter" id="flipbook-counter">Spread 1 / 3</span>
+        <button class="flipbook-nav-btn" id="flipbook-next" aria-label="Next page">›</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       RESOURCES
+  ══════════════════════════════════════════ -->
+  <section id="resources" class="section section--resources">
+    <div class="container">
+      <div class="section-label reveal-text">Library</div>
+      <h2 class="section-title reveal-text">Free Resources</h2>
+      <p class="section-sub reveal-text">Open-access study materials. No sign-up required.</p>
+
+      <div class="resources-search">
+        <input type="text" id="resource-search" placeholder="Search resources..." autocomplete="off" />
+      </div>
+
+      <div class="resources-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="mathematics">Mathematics</button>
+        <button class="filter-btn" data-filter="physics">Physics</button>
+        <button class="filter-btn" data-filter="exams">Exams</button>
+        <button class="filter-btn" data-filter="beginner">Beginner</button>
+        <button class="filter-btn" data-filter="advanced">Advanced</button>
+      </div>
+
+      <div class="resources-grid" id="resources-grid">
+        <div class="resource-item tilt-card" data-tags="mathematics advanced">
+          <div class="resource-icon">∑</div>
+          <h4>Calculus Formula Sheet</h4>
+          <p>All key differentiation and integration rules in one page.</p>
+          <span class="resource-tag">Mathematics</span>
+          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
+        </div>
+        <div class="resource-item tilt-card" data-tags="physics beginner">
+          <div class="resource-icon">⚛</div>
+          <h4>Physics Equations Reference</h4>
+          <p>A-Level Physics formulae with context and usage notes.</p>
+          <span class="resource-tag">Physics</span>
+          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
+        </div>
+        <div class="resource-item tilt-card" data-tags="exams advanced">
+          <div class="resource-icon">✎</div>
+          <h4>Exam Technique Guide</h4>
+          <p>How to maximise marks using mark-scheme logic.</p>
+          <span class="resource-tag">Exams</span>
+          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
+        </div>
+        <div class="resource-item tilt-card" data-tags="mathematics beginner">
+          <div class="resource-icon">◻</div>
+          <h4>Algebra Fundamentals</h4>
+          <p>Core algebraic techniques from GCSE level upwards.</p>
+          <span class="resource-tag">Mathematics</span>
+          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
+        </div>
+        <div class="resource-item tilt-card" data-tags="physics advanced">
+          <div class="resource-icon">🌊</div>
+          <h4>Waves &amp; Optics Summary</h4>
+          <p>Key concepts, diagrams, and derivations for waves.</p>
+          <span class="resource-tag">Physics</span>
+          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
+        </div>
+        <div class="resource-item tilt-card" data-tags="exams beginner">
+          <div class="resource-icon">📅</div>
+          <h4>Revision Timetable Template</h4>
+          <p>A structured 8-week revision plan with built-in rest periods.</p>
+          <span class="resource-tag">Exams</span>
+          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FAQ
+  ══════════════════════════════════════════ -->
+  <section id="faq" class="section section--faq">
+    <div class="container">
+      <div class="section-label reveal-text">FAQ</div>
+      <h2 class="section-title reveal-text">Common Questions</h2>
+
+      <div class="faq-grid" id="faq-grid">
+        <div class="faq-card" data-index="0">
+          <div class="faq-question">
+            <span class="faq-num">01</span>
+            How do lessons work?
+          </div>
+          <div class="faq-answer">
+            <p>Sessions are 60 or 90 minutes, conducted either in-person (London) or online via an interactive whiteboard. Each session begins with a brief review, moves through new material, and ends with targeted practice.</p>
+          </div>
+        </div>
+        <div class="faq-card" data-index="1">
+          <div class="faq-question">
+            <span class="faq-num">02</span>
+            Do you teach online?
+          </div>
+          <div class="faq-answer">
+            <p>Yes — online sessions are fully interactive using a shared digital whiteboard. Many students prefer this format for its flexibility. Online and in-person sessions are equally effective.</p>
+          </div>
+        </div>
+        <div class="faq-card" data-index="2">
+          <div class="faq-question">
+            <span class="faq-num">03</span>
+            Which age groups do you teach?
+          </div>
+          <div class="faq-answer">
+            <p>Lower Levels, GCSE (Years 10–11) and A-Level / IB (Years 12–13). I also work with university students on foundational maths and physics modules.</p>
+          </div>
+        </div>
+        <div class="faq-card" data-index="3">
+          <div class="faq-question">
+            <span class="faq-num">04</span>
+            How long are sessions?
+          </div>
+          <div class="faq-answer">
+            <p>Standard sessions are 60 minutes. Extended sessions of 90 minutes are available and recommended for exam-intensive periods. Packages of 4, 8, or 12 sessions are also available.</p>
+          </div>
+        </div>
+        <div class="faq-card" data-index="4">
+          <div class="faq-question">
+            <span class="faq-num">05</span>
+            Do you provide homework?
+          </div>
+          <div class="faq-answer">
+            <p>Yes — targeted practice problems are set after every session. These are calibrated to reinforce exactly what was covered. Marked and returned before the next session.</p>
+          </div>
+        </div>
+        <div class="faq-card" data-index="5">
+          <div class="faq-question">
+            <span class="faq-num">06</span>
+            What is your availability?
+          </div>
+          <div class="faq-answer">
+            <p>Intake is intentionally selective to maintain quality. Weekdays and weekends. Spaces are limited — early booking is recommended, especially before exam season.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       BOOKING
+  ══════════════════════════════════════════ -->
+  <section id="booking" class="section section--booking">
+    <div class="container">
+      <div class="section-label reveal-text">Next Step</div>
+      <h2 class="section-title reveal-text">Ready to Begin?</h2>
+      <p class="section-sub reveal-text">Securing your place takes less than two minutes.</p>
+
+      <div class="booking-flow">
+
+        <!-- Step 1 — Your Details -->
+        <div class="booking-step active" data-step="1">
+          <div class="booking-step-num">01</div>
+          <h4>Your Details</h4>
+          <div class="booking-fields">
+            <input type="text"  id="booking-name"  class="booking-select" placeholder="Full name *" required />
+            <input type="email" id="booking-email" class="booking-select" placeholder="Email address *" required />
+            <input type="tel"   id="booking-phone" class="booking-select" placeholder="Phone number (optional)" />
+          </div>
+        </div>
+
+        <div class="booking-arrow">→</div>
+
+        <!-- Step 2 — Subject -->
+        <div class="booking-step" data-step="2">
+          <div class="booking-step-num">02</div>
+          <h4>Choose Subject</h4>
+          <div class="booking-select-wrap">
+            <select id="booking-subject" class="booking-select">
+              <option value="">Select a subject</option>
+              <option>Mathematics</option>
+              <option>Physics</option>
+              <option>Chemistry</option>
+              <option>Computer Science</option>
+              <option>Economics</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="booking-arrow">→</div>
+
+        <!-- Step 3 — Session Type -->
+        <div class="booking-step" data-step="3">
+          <div class="booking-step-num">03</div>
+          <h4>Session Type</h4>
+          <div class="booking-select-wrap">
+            <select id="booking-type" class="booking-select">
+              <option value="">Select type</option>
+              <option>60-minute session</option>
+              <option>90-minute session</option>
+              <option>4-session package</option>
+              <option>8-session package</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="booking-arrow">→</div>
+
+        <!-- Step 4 — Date -->
+        <div class="booking-step" data-step="4">
+          <div class="booking-step-num">04</div>
+          <h4>Choose Date</h4>
+          <input type="date" id="booking-date" class="booking-select" />
+        </div>
+
+        <div class="booking-arrow">→</div>
+
+        <!-- Step 5 — Confirm -->
+        <div class="booking-step" data-step="5">
+          <div class="booking-step-num">05</div>
+          <h4>Confirm</h4>
+          <button class="btn btn--primary btn--lg magnetic" id="booking-submit">
+            Reserve My Place
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       BOOKING CONFIRMATION MODAL
+       — shows before mailto opens so student
+         sees exactly what is being sent
+  ══════════════════════════════════════════ -->
+  <div class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-labelledby="bm-title">
+    <div class="booking-modal-card">
+
+      <!-- Email-style header — matches DreamPath session_notification layout -->
+      <div class="bm-header">
+        <div class="bm-logo">Collins Kiragu</div>
+        <p class="bm-logo-sub">Private Tutor &nbsp;·&nbsp; Educator &nbsp;·&nbsp; Mentor</p>
+      </div>
+
+      <!-- Body -->
+      <div class="bm-body">
+        <div class="bm-icon">📅</div>
+
+        <p class="bm-greeting" id="bm-greeting">Hello,</p>
+        <p class="bm-category">SESSION BOOKING REQUEST</p>
+
+        <h2 class="bm-title" id="bm-title">New Tutoring Session Request</h2>
+
+        <p class="bm-intro">
+          Your booking request is ready to send. Please review the details below,
+          then click <strong>Send Booking Request</strong> — your email client will
+          open with everything pre-filled and ready to go.
+        </p>
+
+        <!-- Session details box — mirrors metadata box in session_notification.html.erb -->
+        <div class="bm-details-box">
+          <strong class="bm-details-heading">Session details</strong>
+          <div class="bm-detail-row"><span>Student Name</span>    <strong id="bm-name"></strong></div>
+          <div class="bm-detail-row"><span>Email Address</span>   <strong id="bm-email-val"></strong></div>
+          <div class="bm-detail-row" id="bm-phone-row">
+            <span>Phone</span><strong id="bm-phone-val"></strong>
+          </div>
+          <div class="bm-detail-row"><span>Subject</span>         <strong id="bm-subject-val"></strong></div>
+          <div class="bm-detail-row"><span>Session Type</span>    <strong id="bm-type-val"></strong></div>
+          <div class="bm-detail-row"><span>Preferred Date</span>  <strong id="bm-date-val"></strong></div>
+          <div class="bm-detail-row"><span>Sent</span>            <strong id="bm-timestamp"></strong></div>
+        </div>
+
+        <!-- CTA — opens mailto -->
+        <button class="bm-send-btn" id="bm-send-btn">
+          Send Booking Request →
+        </button>
+
+        <p class="bm-note">
+          Your email client will open with this request pre-filled and addressed to
+          <strong>kiragucollins@gmail.com</strong>. Simply hit send.
+        </p>
+      </div>
+
+      <!-- Footer — mirrors mailer.html.erb footer -->
+      <div class="bm-footer">
+        <p>© 2026 Collins Kiragu · Private Tutor & Educator</p>
+        <p>London &nbsp;·&nbsp; Teaching Globally Online</p>
+      </div>
+
+      <!-- Close -->
+      <button class="bm-close" id="bm-close" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       CONTACT
+  ══════════════════════════════════════════ -->
+  <section id="contact" class="section section--contact">
+    <canvas id="contact-canvas"></canvas>
+    <div class="contact-content">
+      <div class="section-label reveal-text">Contact</div>
+      <h2 class="contact-headline reveal-text">Let's build something<br /><em>remarkable.</em></h2>
+      <p class="contact-sub reveal-text">
+        Reach out directly. I respond to all enquiries within 24 hours.
+      </p>
+      <div class="contact-ctas reveal-text">
+        <a href="#booking" class="btn btn--primary magnetic">Book a Lesson</a>
+        <a href="mailto:kiragucollins@gmail.com" class="btn btn--ghost magnetic">Email Me</a>
+      </div>
+      <div class="contact-details reveal-text">
+        <p>kiragucollins@gmail.com</p>
+        <p>Based in London &nbsp;·&nbsp; Teaching Globally Online</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer id="footer" class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <p class="footer-name">Collins Kiragu</p>
+          <p class="footer-tagline">Maths Professor &nbsp;•&nbsp; Tutor &nbsp;•&nbsp; Mentor</p>
+        </div>
+        <div class="footer-links">
+          <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
+        </div>
+        <div class="footer-legal">
+          <p>© 2026 Collins Kiragu</p>
+          <p class="footer-spark" id="footer-spark">Designed to inspire curiosity.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AI Tutor Button -->
+  <div class="ai-tutor-btn" id="ai-tutor-btn">
+    <span class="ai-tutor-icon">✦</span>
+    <span class="ai-tutor-label">Ask the Tutor</span>
+  </div>
+  <div class="ai-tutor-panel" id="ai-tutor-panel">
+    <div class="ai-tutor-header">
+      <span>Ask the Tutor</span>
+      <button id="ai-tutor-close">✕</button>
+    </div>
+    <div class="ai-tutor-messages" id="ai-messages">
+      <div class="ai-message ai-message--bot">
+        Hello! I'm here to help you navigate this portfolio and point you toward the right resources. What subject are you working on?
+      </div>
+    </div>
+    <div class="ai-tutor-input-row">
+      <input type="text" id="ai-input" placeholder="Ask a question..." />
+      <button id="ai-send">→</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
