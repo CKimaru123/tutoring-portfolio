@@ -698,7 +698,7 @@ export function initClassroom() {
       new THREE.MeshStandardMaterial({ map: makeTextCanvas([
         { text: "THE TUTOR'S DESK", y: 80,  size: 36, weight: 'bold', color: '#44ff88' },
         { text: 'Learn · Practice · Master', y: 130, size: 22, color: '#88bbff' },
-        { text: 'Alex Morgan | Mathematics & Sciences', y: 175, size: 18, color: '#aaaacc' },
+        { text: 'Collins Kiragu | Mathematics & Sciences', y: 175, size: 18, color: '#aaaacc' },
       ], { bg: '#0d1117', width: 512, height: 256 }), roughness: 0.5 }));
     lDisp.position.set(0, 1.2, -0.98); lDisp.rotation.x = -0.12; laptopG.add(lDisp);
     const lProxy = new THREE.Mesh(new THREE.BoxGeometry(3.4, 2.4, 2.5), new THREE.MeshBasicMaterial({ visible: false }));

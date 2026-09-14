@@ -17,7 +17,7 @@ const BOOKS = {
           <div class="fp-cover-rule"></div>
           <p class="fp-cover-type">Interactive Curriculum</p>
           <h2 class="fp-cover-title">Calculus Mastery</h2>
-          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Alex Morgan · A-Level &amp; IB Mathematics</p>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Collins Kiragu · A-Level &amp; IB Mathematics</p>
         </div>`,
         right: `<p class="fp-page-num fp-page-num--right">1</p>
           <h2 class="fp-h1">Overview</h2>
@@ -95,7 +95,7 @@ const BOOKS = {
           <div class="fp-cover-rule"></div>
           <p class="fp-cover-type">Student Learning Program</p>
           <h2 class="fp-cover-title">Physics Fundamentals</h2>
-          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Alex Morgan · A-Level &amp; IB Physics</p>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Collins Kiragu · A-Level &amp; IB Physics</p>
         </div>`,
         right: `<p class="fp-page-num fp-page-num--right">1</p>
           <h2 class="fp-h1">Overview</h2>
@@ -169,7 +169,7 @@ const BOOKS = {
           <div class="fp-cover-rule"></div>
           <p class="fp-cover-type">Framework &amp; Resource Pack</p>
           <h2 class="fp-cover-title">Exam Preparation System</h2>
-          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Alex Morgan · All Subjects &amp; Levels</p>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Collins Kiragu · All Subjects &amp; Levels</p>
         </div>`,
         right: `<p class="fp-page-num fp-page-num--right">1</p>
           <h2 class="fp-h1">The Problem with Exam Prep</h2>
@@ -246,7 +246,7 @@ const BOOKS = {
           <div class="fp-cover-rule"></div>
           <p class="fp-cover-type">Visual Study Guide</p>
           <h2 class="fp-cover-title">Organic Chemistry Framework</h2>
-          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Alex Morgan · A-Level &amp; IB Chemistry</p>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Collins Kiragu · A-Level &amp; IB Chemistry</p>
         </div>`,
         right: `<p class="fp-page-num fp-page-num--right">1</p>
           <h2 class="fp-h1">Why Organic Chemistry Feels Impossible</h2>
@@ -317,7 +317,7 @@ const BOOKS = {
           <div class="fp-cover-rule"></div>
           <p class="fp-cover-type">Methodology Paper</p>
           <h2 class="fp-cover-title">Critical Thinking in STEM</h2>
-          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Alex Morgan · Teaching Methodology</p>
+          <p style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:0.8rem">Collins Kiragu · Teaching Methodology</p>
         </div>`,
         right: `<p class="fp-page-num fp-page-num--right">1</p>
           <h2 class="fp-h1">Abstract</h2>
