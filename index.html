@@ -1,1164 +1,891 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Collins Kiragu — Private Tutor & Maths Professor</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/src/styles/main.css" />
-</head>
-<body>
-  <!-- ============ ARRIVAL FROM LANDING PAGE ============ -->
-<div id="arrivalFlash"></div>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Get to know me</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  #arrivalFlash {
+  :root {
+    --gold: #FFD37A;
+    --gold-deep: #FFB347;
+    --ivory: #F5EFE6;
+    --void: #050510;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--void);
+    overflow: hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ivory);
+    cursor: default;
+  }
+  canvas { display: block; position: fixed; inset: 0; z-index: 0; }
+  #ui { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+
+  /* ---------- CAPTIONS ---------- */
+  #captions {
+    position: absolute;
+    left: 50%;
+    bottom: 22vh;
+    transform: translateX(-50%);
+    width: min(920px, 88vw);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  #captions::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -1.5rem;
+    transform: translateX(-50%);
+    width: min(780px, 90vw);
+    height: 4.5rem;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(5, 5, 16, 0.75) 0%,
+      rgba(5, 5, 16, 0.55) 45%,
+      rgba(5, 5, 16, 0.0) 100%
+    );
+    filter: blur(14px);
+    pointer-events: none;
+    z-index: -1;
+    opacity: var(--plate-opacity, 0.7);
+    transition: opacity 0.8s ease;
+  }
+
+  .caption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.2rem, 2.9vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1.1s ease, transform 1.1s ease;
+    padding: 0 1.5rem;
+  }
+  .caption.show { opacity: 1; transform: translateY(0); }
+
+  
+  /* ============================================================
+     CAPTION COLORS
+     ------------------------------------------------------------
+     OLD (blended into the warm image — kept here for reference):
+
+       .caption.student { font-style: italic; color: #dcd7cf; }
+       .caption.tutor   { color: #FFD37A; font-style: normal; }
+
+     NEW (cool, high-contrast tones that stand apart from the
+     warm golden classroom and the greyscale girl):
+     ============================================================ */
+
+  /* The Student — cool off-white, hint of blue */
+  .caption.student {
+    font-style: italic;
+    color: #EEF2F8;
+    text-shadow:
+      0 0 20px rgba(120, 180, 255, 0.35),
+      0 2px 14px rgba(0, 0, 0, 0.95),
+      0 1px 2px  rgba(0, 0, 0, 1);
+  }
+
+  /* The Tutor — luminous cyan-white, unmistakably not the scene's gold */
+  .caption.tutor {
+    font-style: normal;
+    color: #EAFBFF;
+    text-shadow:
+      0 0 26px rgba(140, 220, 255, 0.55),
+      0 0 60px rgba(140, 220, 255, 0.20),
+      0 2px 14px rgba(0, 0, 0, 0.95),
+      0 1px 2px  rgba(0, 0, 0, 1);
+  }
+  /* Speaker label ("THE TUTOR" / "THE STUDENT") */
+  .caption .who {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    opacity: 1;
+    text-shadow:
+      0 0 12px rgba(0, 0, 0, 0.9),
+      0 1px 2px  rgba(0, 0, 0, 1);
+  }
+
+  .caption.student .who { color: #A8B6CC; }
+  .caption.tutor   .who { color: #7FE2FF; }
+
+  /* ---------- BUTTON ---------- */
+  #enterBtn {
+    position: absolute;
+    left: 50%;
+    bottom: 10vh;
+    transform: translateX(-50%);
+    padding: 1.15rem 3.2rem;
+    background: transparent;
+    border: 1px solid rgba(255,211,122,0.55);
+    border-radius: 60px;
+    color: var(--gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 20;
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  #enterBtn::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 60px;
+    border: 1px solid rgba(255,211,122,0.25);
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: scale(0.96);
+  }
+  #enterBtn:hover {
+    color: #fff;
+    border-color: var(--gold);
+    background: rgba(255,211,122,0.08);
+    box-shadow: 0 0 40px rgba(255,211,122,0.55), 0 0 80px rgba(255,179,71,0.25);
+    letter-spacing: 0.4em;
+  }
+  #enterBtn:hover::after { opacity: 1; transform: scale(1.05); }
+  #enterBtn.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) scale(1.3);
+    filter: blur(6px);
+  }
+
+  #hint {
+    position: absolute;
+    left: 50%;
+    bottom: 6vh;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(255,211,122,0.5);
+    opacity: 0;
+    transition: opacity 2s ease;
+    pointer-events: none;
+  }
+  #hint.show { opacity: 1; }
+
+  /* ---------- FLASH ---------- */
+  #flash {
     position: fixed;
     inset: 0;
-    z-index: 99999;
-    pointer-events: none;
     background: radial-gradient(circle at 50% 55%, #fff 0%, #FFD37A 30%, #FFB347 55%, transparent 80%);
-    animation: arrivalFade 2.0s ease-out forwards;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    transition: opacity 0.9s ease;
   }
-  @keyframes arrivalFade {
-    0%   { opacity: 1; }
-    70%  { opacity: 0.3; }
-    100% { opacity: 0; }
+  body.warping #flash { opacity: 1; }
+
+  /* ---------- PRELOADER ---------- */
+  #preload {
+    position: fixed; inset: 0;
+    background: var(--void);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000;
+    transition: opacity 1.2s ease;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 1rem;
   }
+  #preload.gone { opacity: 0; pointer-events: none; }
+
+  /* ---------- SUBTITLE TOGGLE ---------- */
+  #subToggle {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,211,122,0.3);
+    color: rgba(255,211,122,0.8);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.9rem;
+    border-radius: 30px;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 30;
+    backdrop-filter: blur(6px);
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  #subToggle:hover {
+    color: #fff;
+    border-color: var(--gold);
+    background: rgba(255,211,122,0.1);
+  }
+  #subToggle.off { opacity: 0.4; }
 </style>
-<!-- ============ END ARRIVAL ============ -->
-  <!-- Custom Cursor — COMMENTED OUT, using browser default cursor instead
-  <div id="cursor">
-    <div class="cursor-dot"></div>
-    <div class="cursor-ring"></div>
-    <span class="cursor-label"></span>
-  </div>
-  -->
-
-  <!-- ══════════════════════════════════════════
-       LOADING SCREEN
-  ══════════════════════════════════════════ -->
-  <div id="loader">
-    <div class="loader-inner">
-      <div class="loader-name">Collins Kiragu</div>
-      <div class="loader-role">PRIVATE TUTOR &nbsp;•&nbsp; Maths Professor &nbsp;•&nbsp; MENTOR</div>
-      <canvas id="loader-canvas"></canvas>
-
-      <!-- Scene info panel — typed equation + description + quote -->
-      <div class="loader-scene-info" id="loader-scene-info">
-        <div class="loader-scene-name"   id="loader-scene-name"></div>
-        <div class="loader-equation"     id="loader-equation-text"></div>
-        <div class="loader-description"  id="loader-description"></div>
-        <div class="loader-quote"        id="loader-quote"></div>
-        <div class="loader-scene-dots"   id="loader-scene-dots">
-          <span class="ldot active"></span>
-          <span class="ldot"></span>
-          <span class="ldot"></span>
-          <span class="ldot"></span>
-          <span class="ldot"></span>
-        </div>
-      </div>
-      <button class="loader-enter" id="loader-enter">ENTER</button>
-      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       FLOATING NAVIGATION
-  ══════════════════════════════════════════ -->
-  <nav id="nav">
-    <div class="nav-inner">
-      <a class="nav-logo" href="#hero">AM</a>
-      <ul class="nav-links">
-        <li><a href="#hero"    data-section="hero">Home</a></li>
-        <li><a href="#about"   data-section="about">About</a></li>
-        <li><a href="#subjects" data-section="subjects">Subjects</a></li>
-        <li><a href="#results" data-section="results">Results</a></li>
-        <li><a href="#desk"    data-section="desk">Experience</a></li>
-        <li><a href="#contact" data-section="contact">Contact</a></li>
-      </ul>
-      <div class="nav-progress">
-        <div class="nav-progress-fill"></div>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ══════════════════════════════════════════
-       HERO
-  ══════════════════════════════════════════ -->
-  <section id="hero" class="section section--hero">
-    <div class="hero-content">
-      <p class="eyebrow reveal-text">PRIVATE TUTOR &nbsp;•&nbsp; Maths Professor &nbsp;•&nbsp; MENTOR</p>
-      <h1 class="hero-headline reveal-text">
-        Building Minds<br />
-        <em>That Think Beyond</em><br />
-        the Classroom.
-      </h1>
-      <p class="hero-sub reveal-text">
-        Personalised, rigorous tutoring in Mathematics, Computer Science, Business Studies and All Sciences.
-        Tailored to each student. Built for lasting results.
-      </p>
-      <div class="hero-ctas reveal-text">
-        <a href="#booking" class="btn btn--primary magnetic">Book a Session</a>
-        <a href="#subjects" class="btn btn--ghost magnetic">Explore My Work</a>
-      </div>
-    </div>
-    <div class="hero-3d">
-      <canvas id="hero-canvas"></canvas>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       TRUST / STATISTICS
-  ══════════════════════════════════════════ -->
-  <section id="stats" class="section section--stats">
-    <div class="container">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <span class="stat-number" data-target="94" data-suffix="%">0</span>
-          <p class="stat-label">Students achieving target grade</p>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="2.3" data-prefix="+" data-decimal>0</span>
-          <p class="stat-label">Average grade improvement</p>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="500" data-suffix="+">0</span>
-          <p class="stat-label">Students taught</p>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" data-target="8" data-suffix="+">0</span>
-          <p class="stat-label">Years teaching</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       ABOUT THE TUTOR
-  ══════════════════════════════════════════ -->
-  <section id="about" class="section section--about">
-    <div class="container">
-      <div class="section-label reveal-text">About the Tutor</div>
-      <h2 class="section-title reveal-text">Meet the Maths Professor<br /><em>Behind the Results</em></h2>
-
-      <div class="about-grid">
-        <!-- Profile Card -->
-        <div class="about-card-wrap">
-          <div class="profile-card" id="profile-card">
-            <div class="profile-card-inner">
-              <div class="profile-card-front">
-                <div class="profile-avatar">AM</div>
-                <h3>Collins Kiragu</h3>
-                <p class="profile-title">Mathematics &amp; Physics Professor</p>
-                <p class="profile-exp">8+ Years Experience</p>
-                <div class="profile-subjects">
-                  <span>Mathematics</span>
-                  <span>Physics</span>
-                  <span>Chemistry</span>
-                </div>
-                <p class="profile-flip-hint">Hover to reveal</p>
-              </div>
-              <div class="profile-card-back">
-                <h4>Qualifications</h4>
-                <ul>
-                  <li>BSc Mathematics, University of Edinburgh</li>
-                  <li>MSc Applied Mathematics, Imperial College</li>
-                  <li>Qualified Teacher Status (QTS)</li>
-                  <li>Cambridge CELTA Certified</li>
-                </ul>
-                <h4>Teaching Philosophy</h4>
-                <p>"Every student has a unique path to understanding. My role is to find it."</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bio + Timeline -->
-        <div class="about-bio">
-          <p class="about-intro reveal-text">
-            I am a Professor and private tutor with over eight years of experience helping students at all
-            levels unlock their potential in Mathematics, Computer Science, Economics, and the Sciences. My approach combines
-            conceptual depth with personalised strategy — building not just exam results, but independent
-            thinkers.
-          </p>
-
-          <div class="timeline" id="timeline">
-            <div class="timeline-track">
-              <div class="timeline-node active" data-year="2018">
-                <span class="timeline-year">2018</span>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <strong>Founded independent tutoring practice.</strong>
-                  First cohort of 12 students, 100% pass rate.
-                </div>
-              </div>
-              <div class="timeline-node" data-year="2020">
-                <span class="timeline-year">2020</span>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <strong>Expanded to online learning.</strong>
-                  Developed fully interactive virtual curriculum.
-                </div>
-              </div>
-              <div class="timeline-node" data-year="2022">
-                <span class="timeline-year">2022</span>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <strong>Developed personalised learning methodology.</strong>
-                  Advanced mathematics diagnostic framework.
-                </div>
-              </div>
-              <div class="timeline-node" data-year="2024">
-                <span class="timeline-year">2024</span>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <strong>500th student milestone.</strong>
-                  Published open-access study guides used by 3,000+ students.
-                </div>
-              </div>
-              <div class="timeline-node" data-year="2026">
-                <span class="timeline-year">2026</span>
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                  <strong>Present.</strong>
-                  Selective intake, premium personalised sessions.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       SUBJECTS
-  ══════════════════════════════════════════ -->
-  <section id="subjects" class="section section--subjects">
-    <div class="container">
-      <div class="section-label reveal-text">Areas of Expertise</div>
-      <h2 class="section-title reveal-text">Subjects I Teach</h2>
-      <p class="section-sub reveal-text">Each subject is approached with rigour, depth, and a tailored strategy.</p>
-
-      <div class="subjects-grid" id="subjects-grid">
-        <div class="subject-card" data-subject="mathematics">
-          <div class="subject-canvas-wrap">
-            <canvas class="subject-canvas" id="canvas-math"></canvas>
-          </div>
-          <div class="subject-info">
-            <h3>Mathematics</h3>
-            <p>Algebra · Calculus · Geometry · Statistics</p>
-          </div>
-          <div class="subject-panel">
-            <button class="subject-panel-close">✕</button>
-            <h3>Mathematics</h3>
-            <ul>
-              <li>Algebra &amp; Functions</li>
-              <li>Calculus (Differential &amp; Integral)</li>
-              <li>Geometry &amp; Trigonometry</li>
-              <li>Statistics &amp; Probability</li>
-              <li>Exam Preparation (A-Level, IB, SAT)</li>
-            </ul>
-            <a href="#booking" class="btn btn--primary">Book Mathematics →</a>
-          </div>
-        </div>
-
-        <div class="subject-card" data-subject="physics">
-          <div class="subject-canvas-wrap">
-            <canvas class="subject-canvas" id="canvas-physics"></canvas>
-          </div>
-          <div class="subject-info">
-            <h3>Physics</h3>
-            <p>Mechanics · Waves · Electromagnetism</p>
-          </div>
-          <div class="subject-panel">
-            <button class="subject-panel-close">✕</button>
-            <h3>Physics</h3>
-            <ul>
-              <li>Classical Mechanics</li>
-              <li>Waves &amp; Optics</li>
-              <li>Electromagnetism</li>
-              <li>Quantum Foundations</li>
-              <li>Exam Preparation (A-Level, IB)</li>
-            </ul>
-            <a href="#booking" class="btn btn--primary">Book Physics →</a>
-          </div>
-        </div>
-
-        <div class="subject-card" data-subject="chemistry">
-          <div class="subject-canvas-wrap">
-            <canvas class="subject-canvas" id="canvas-chem"></canvas>
-          </div>
-          <div class="subject-info">
-            <h3>Chemistry</h3>
-            <p>Organic · Physical · Inorganic</p>
-          </div>
-          <div class="subject-panel">
-            <button class="subject-panel-close">✕</button>
-            <h3>Chemistry</h3>
-            <ul>
-              <li>Organic Chemistry</li>
-              <li>Physical Chemistry</li>
-              <li>Inorganic Chemistry</li>
-              <li>Practical Techniques</li>
-              <li>Exam Preparation (A-Level, IB)</li>
-            </ul>
-            <a href="#booking" class="btn btn--primary">Book Chemistry →</a>
-          </div>
-        </div>
-
-        <div class="subject-card" data-subject="cs">
-          <div class="subject-canvas-wrap">
-            <canvas class="subject-canvas" id="canvas-cs"></canvas>
-          </div>
-          <div class="subject-info">
-            <h3>Computer Science</h3>
-            <p>Algorithms · Data Structures · Python</p>
-          </div>
-          <div class="subject-panel">
-            <button class="subject-panel-close">✕</button>
-            <h3>Computer Science</h3>
-            <ul>
-              <li>Algorithms &amp; Complexity</li>
-              <li>Data Structures</li>
-              <li>Python &amp; Java</li>
-              <li>Computational Thinking</li>
-              <li>Exam Preparation (GCSE, A-Level)</li>
-            </ul>
-            <a href="#booking" class="btn btn--primary">Book CS →</a>
-          </div>
-        </div>
-
-        <div class="subject-card" data-subject="economics">
-          <div class="subject-canvas-wrap">
-            <canvas class="subject-canvas" id="canvas-econ"></canvas>
-          </div>
-          <div class="subject-info">
-            <h3>Economics</h3>
-            <p>Micro · Macro · Econometrics</p>
-          </div>
-          <div class="subject-panel">
-            <button class="subject-panel-close">✕</button>
-            <h3>Economics</h3>
-            <ul>
-              <li>Microeconomics &amp; Market Theory</li>
-              <li>Macroeconomics &amp; Policy</li>
-              <li>Econometrics &amp; Data Analysis</li>
-              <li>Mathematical Economics</li>
-              <li>Exam Preparation (A-Level, IB)</li>
-            </ul>
-            <a href="#booking" class="btn btn--primary">Book Economics →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       TEACHING METHODOLOGY
-  ══════════════════════════════════════════ -->
-  <section id="methodology" class="section section--methodology">
-    <div class="container">
-      <div class="section-label reveal-text">Process</div>
-      <h2 class="section-title reveal-text">How I Teach</h2>
-      <p class="section-sub reveal-text">A proven six-stage methodology that builds genuine mastery — not just exam scores.</p>
-    </div>
-    <div class="methodology-journey">
-      <div class="method-step" data-step="1">
-        <div class="method-number">01</div>
-        <div class="method-icon">◉</div>
-        <h3>Diagnose</h3>
-        <p>Understand the student's current level, gaps, goals, and learning style.</p>
-      </div>
-      <div class="method-connector"></div>
-      <div class="method-step" data-step="2">
-        <div class="method-number">02</div>
-        <div class="method-icon">◈</div>
-        <h3>Plan</h3>
-        <p>Build a personalised roadmap with milestones and targeted resources.</p>
-      </div>
-      <div class="method-connector"></div>
-      <div class="method-step" data-step="3">
-        <div class="method-number">03</div>
-        <div class="method-icon">◆</div>
-        <h3>Teach</h3>
-        <p>Interactive conceptual learning — first principles, then application.</p>
-      </div>
-      <div class="method-connector"></div>
-      <div class="method-step" data-step="4">
-        <div class="method-number">04</div>
-        <div class="method-icon">◇</div>
-        <h3>Practice</h3>
-        <p>Targeted exercises calibrated to difficulty, timed under exam conditions.</p>
-      </div>
-      <div class="method-connector"></div>
-      <div class="method-step" data-step="5">
-        <div class="method-number">05</div>
-        <div class="method-icon">○</div>
-        <h3>Evaluate</h3>
-        <p>Measure progress against the roadmap. Adjust strategy in real time.</p>
-      </div>
-      <div class="method-connector"></div>
-      <div class="method-step" data-step="6">
-        <div class="method-number">06</div>
-        <div class="method-icon">★</div>
-        <h3>Master</h3>
-        <p>Build independent thinkers who no longer need me — the highest goal.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       TUTOR'S DESK — Entry Card (Option B)
-       Full classroom opens as overlay
-  ══════════════════════════════════════════ -->
-  <section id="desk" class="section section--desk">
-    <div class="container">
-      <div class="section-label reveal-text">Explore</div>
-      <h2 class="section-title reveal-text">The Tutor's Desk</h2>
-      <p class="section-sub reveal-text">Step inside the classroom. Explore subjects, click objects, walk around.</p>
-    </div>
-
-    <!-- Entry card — clicking opens the full-screen classroom -->
-    <div class="classroom-entry" id="classroom-entry">
-      <div class="classroom-entry-inner">
-        <div class="classroom-entry-icon">🏫</div>
-        <h3 class="classroom-entry-title">Enter the Virtual Classroom</h3>
-        <p class="classroom-entry-desc">
-          A fully interactive 3D classroom. Click subjects on the whiteboard,
-          explore books and instruments on the desk, and switch to first-person
-          mode to walk around freely.
-        </p>
-        <div class="classroom-entry-tags">
-          <span>📐 Mathematics</span>
-          <span>⚛ Sciences</span>
-          <span>💻 Computer Science</span>
-          <span>📊 Economics</span>
-        </div>
-        <button class="btn btn--primary btn--lg magnetic" id="open-classroom">
-          Enter Classroom →
-        </button>
-      </div>
-      <!-- Preview thumbnail strip -->
-      <div class="classroom-preview-strip">
-        <div class="cp-item">🖥 Interactive Whiteboard</div>
-        <div class="cp-item">📚 Clickable Books</div>
-        <div class="cp-item">🚶 First-Person Mode</div>
-        <div class="cp-item">🎓 Subject Portals</div>
-        <div class="cp-item">❓ Quizzes</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       CLASSROOM OVERLAY — full-screen immersive
-  ══════════════════════════════════════════ -->
-  <div id="classroom-overlay" class="classroom-overlay" aria-modal="true" role="dialog">
-
-    <!-- Three.js renders here -->
-    <canvas id="classroom-canvas"></canvas>
-
-    <!-- HUD: brand + instructions -->
-    <div class="cls-hud">
-      <div class="cls-brand">
-        <div class="cls-brand-title">THE TUTOR'S DESK</div>
-        <div class="cls-brand-sub">Mathematics · Sciences · Computer Science · Economics</div>
-      </div>
-      <div class="cls-instructions" id="cls-instructions">
-        <strong>Explore the classroom</strong><br>
-        Drag to look around &nbsp;·&nbsp; Scroll to zoom &nbsp;·&nbsp; Click objects to learn &nbsp;·&nbsp; Press <kbd>?</kbd> for all controls
-      </div>
-    </div>
-
-    <!-- Mode toggle: orbit ↔ first-person -->
-    <div class="cls-mode-bar">
-      <button class="cls-mode-btn active" id="cls-orbit-btn" title="Orbit mode">
-        🔭 Orbit
-      </button>
-      <button class="cls-mode-btn" id="cls-fp-btn" title="First-person mode">
-        🚶 Walk
-      </button>
-      <button class="cls-close-btn" id="cls-close" title="Close classroom">✕</button>
-    </div>
-
-    <!-- First-person crosshair -->
-    <div class="cls-crosshair" id="cls-crosshair">+</div>
-
-    <!-- Subject info panel (slides in from right on object click) -->
-    <div class="cls-panel" id="cls-panel">
-      <button class="cls-panel-close" id="cls-panel-close">×</button>
-      <div class="cls-panel-icon" id="cls-panel-icon">📚</div>
-      <h2 class="cls-panel-title" id="cls-panel-title">Welcome</h2>
-      <p class="cls-panel-text" id="cls-panel-text">
-        Explore the classroom and click any object to learn more.
-      </p>
-      <!-- Quiz section (Phase 3) -->
-      <div class="cls-quiz" id="cls-quiz" style="display:none">
-        <h4 class="cls-quiz-title" id="cls-quiz-title">Quick Quiz</h4>
-        <div class="cls-quiz-body" id="cls-quiz-body"></div>
-      </div>
-      <button class="cls-panel-action" id="cls-panel-action">Explore Subject →</button>
-    </div>
-
-    <!-- Subject portal overlay (zooms in on whiteboard click) -->
-    <div class="cls-portal" id="cls-portal">
-      <div class="cls-portal-inner" id="cls-portal-inner"></div>
-      <button class="cls-portal-back" id="cls-portal-back">← Back to Classroom</button>
-    </div>
-
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       STUDENT RESULTS
-  ══════════════════════════════════════════ -->
-  <section id="results" class="section section--results">
-    <div class="container">
-      <div class="section-label reveal-text">Outcomes</div>
-      <h2 class="section-title reveal-text">Student Results</h2>
-      <p class="section-sub reveal-text">Evidence over words. Every number represents a real student journey.</p>
-    </div>
-
-    <div class="testimonials-container">
-      <div class="testimonial-card tilt-card">
-        <div class="testimonial-card-inner">
-          <div class="testimonial-front">
-            <div class="testimonial-avatar">S.K.</div>
-            <div class="testimonial-subject">Mathematics · A-Level</div>
-            <p class="testimonial-quote">"I went from a D to an A* in six months. Collins's approach is unlike anything I'd experienced before."</p>
-            <div class="testimonial-result">D → A*</div>
-            <p class="testimonial-hint">Click to see full story</p>
-          </div>
-          <div class="testimonial-back">
-            <table class="testimonial-details">
-              <tr><td>Starting Grade</td><td><strong>D</strong></td></tr>
-              <tr><td>Target Grade</td><td><strong>A*</strong></td></tr>
-              <tr><td>Duration</td><td><strong>6 months</strong></td></tr>
-              <tr><td>Final Result</td><td><strong>A*</strong></td></tr>
-            </table>
-            <p>"The diagnostic approach identified exactly where I was losing marks. We fixed each one systematically." — S.K.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial-card tilt-card">
-        <div class="testimonial-card-inner">
-          <div class="testimonial-front">
-            <div class="testimonial-avatar">J.P.</div>
-            <div class="testimonial-subject">Physics · IB HL</div>
-            <p class="testimonial-quote">"Collins made complex mechanics concepts click in a way two years of school never had."</p>
-            <div class="testimonial-result">4 → 7</div>
-            <p class="testimonial-hint">Click to see full story</p>
-          </div>
-          <div class="testimonial-back">
-            <table class="testimonial-details">
-              <tr><td>Starting Score</td><td><strong>4/7</strong></td></tr>
-              <tr><td>Target Score</td><td><strong>6/7</strong></td></tr>
-              <tr><td>Duration</td><td><strong>4 months</strong></td></tr>
-              <tr><td>Final Result</td><td><strong>7/7</strong></td></tr>
-            </table>
-            <p>"Visual explanations and real-world applications made all the difference." — J.P.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="testimonial-card tilt-card">
-        <div class="testimonial-card-inner">
-          <div class="testimonial-front">
-            <div class="testimonial-avatar">M.R.</div>
-            <div class="testimonial-subject">Chemistry · A-Level</div>
-            <p class="testimonial-quote">"I was ready to drop Chemistry. Three months later I got an A."</p>
-            <div class="testimonial-result">E → A</div>
-            <p class="testimonial-hint">Click to see full story</p>
-          </div>
-          <div class="testimonial-back">
-            <table class="testimonial-details">
-              <tr><td>Starting Grade</td><td><strong>E</strong></td></tr>
-              <tr><td>Target Grade</td><td><strong>C</strong></td></tr>
-              <tr><td>Duration</td><td><strong>3 months</strong></td></tr>
-              <tr><td>Final Result</td><td><strong>A</strong></td></tr>
-            </table>
-            <p>"The organic chemistry framework Collins built for me saved my predicted grade." — M.R.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       CASE STUDIES
-  ══════════════════════════════════════════ -->
-  <section id="case-studies" class="section section--case-studies">
-    <div class="container">
-      <div class="section-label reveal-text">Case Studies</div>
-      <h2 class="section-title reveal-text">Student Journeys</h2>
-      <p class="section-sub reveal-text">Detailed breakdowns of real transformations.</p>
-
-      <div class="case-studies-list">
-
-        <div class="case-study reveal-up">
-          <div class="case-study-header">
-            <span class="case-number">01</span>
-            <h3>From C → A in 14 Weeks</h3>
-            <span class="case-subject">A-Level Mathematics</span>
-          </div>
-          <div class="case-study-body">
-            <div class="case-col">
-              <h4>Challenge</h4>
-              <p>Student struggled with calculus and abstract problem-solving under exam pressure. Foundational gaps in algebraic manipulation.</p>
-            </div>
-            <div class="case-col">
-              <h4>Strategy</h4>
-              <p>Personalised weekly curriculum. Targeted past paper practice. Real-time feedback on method, not just answers.</p>
-            </div>
-            <div class="case-col">
-              <h4>Outcome</h4>
-              <p>Final assessment: <strong>A</strong>. Student went on to read Engineering at UCL.</p>
-            </div>
-          </div>
-          <div class="progress-slider">
-            <div class="progress-track">
-              <div class="progress-before">
-                <span>Before</span>
-                <div class="grade-bar" style="--pct: 50%"><div class="grade-fill"></div></div>
-                <strong>Grade C</strong>
-              </div>
-              <div class="progress-divider">
-                <div class="progress-handle" data-draggable></div>
-              </div>
-              <div class="progress-after">
-                <span>After</span>
-                <div class="grade-bar" style="--pct: 90%"><div class="grade-fill"></div></div>
-                <strong>Grade A</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="case-study reveal-up">
-          <div class="case-study-header">
-            <span class="case-number">02</span>
-            <h3>IB Physics: 4 → 7 in One Term</h3>
-            <span class="case-subject">IB Higher Level Physics</span>
-          </div>
-          <div class="case-study-body">
-            <div class="case-col">
-              <h4>Challenge</h4>
-              <p>Mechanics and electromagnetism both weak. Student lacked confidence with vector problems and unit analysis.</p>
-            </div>
-            <div class="case-col">
-              <h4>Strategy</h4>
-              <p>First-principles approach. Built physical intuition before introducing mathematical formalism.</p>
-            </div>
-            <div class="case-col">
-              <h4>Outcome</h4>
-              <p>Final IB score: <strong>7/7</strong>. Exceeded own target by one full grade.</p>
-            </div>
-          </div>
-          <div class="progress-slider">
-            <div class="progress-track">
-              <div class="progress-before">
-                <span>Before</span>
-                <div class="grade-bar" style="--pct: 45%"><div class="grade-fill"></div></div>
-                <strong>Score 4/7</strong>
-              </div>
-              <div class="progress-divider">
-                <div class="progress-handle" data-draggable></div>
-              </div>
-              <div class="progress-after">
-                <span>After</span>
-                <div class="grade-bar" style="--pct: 100%"><div class="grade-fill"></div></div>
-                <strong>Score 7/7</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="case-study reveal-up">
-          <div class="case-study-header">
-            <span class="case-number">03</span>
-            <h3>Chemistry Rescue — E to A in 12 Weeks</h3>
-            <span class="case-subject">A-Level Chemistry</span>
-          </div>
-          <div class="case-study-body">
-            <div class="case-col">
-              <h4>Challenge</h4>
-              <p>Student at risk of failing. Organic chemistry completely lost. Low exam technique and confidence.</p>
-            </div>
-            <div class="case-col">
-              <h4>Strategy</h4>
-              <p>Structured organic chemistry framework. Targeted mock exams with mark-scheme training.</p>
-            </div>
-            <div class="case-col">
-              <h4>Outcome</h4>
-              <p>Final assessment: <strong>A</strong>. Target was C. Exceeded expectations by two grades.</p>
-            </div>
-          </div>
-          <div class="progress-slider">
-            <div class="progress-track">
-              <div class="progress-before">
-                <span>Before</span>
-                <div class="grade-bar" style="--pct: 25%"><div class="grade-fill"></div></div>
-                <strong>Grade E</strong>
-              </div>
-              <div class="progress-divider">
-                <div class="progress-handle" data-draggable></div>
-              </div>
-              <div class="progress-after">
-                <span>After</span>
-                <div class="grade-bar" style="--pct: 90%"><div class="grade-fill"></div></div>
-                <strong>Grade A</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       ACADEMIC PORTFOLIO / BOOKSHELF
-  ══════════════════════════════════════════ -->
-  <section id="portfolio" class="section section--portfolio">
-    <div class="container">
-      <div class="section-label reveal-text">Portfolio</div>
-      <h2 class="section-title reveal-text">Academic Projects</h2>
-      <p class="section-sub reveal-text">Teaching materials, curricula, and research — click a book to explore.</p>
-    </div>
-    <div class="bookshelf" id="bookshelf">
-      <div class="book-item tilt-card" data-project="calculus">
-        <div class="book-spine"><span>Calculus Mastery</span></div>
-        <div class="book-panel">
-          <h3>Calculus Mastery</h3>
-          <p class="book-type">Interactive Curriculum</p>
-          <p>A complete A-Level calculus course built from first principles. Used by 1,200+ students.</p>
-          <button class="btn btn--ghost btn--sm view-project-btn" data-project="calculus">View Project →</button>
-        </div>
-      </div>
-      <div class="book-item tilt-card" data-project="physics">
-        <div class="book-spine"><span>Physics Fundamentals</span></div>
-        <div class="book-panel">
-          <h3>Physics Fundamentals</h3>
-          <p class="book-type">Student Learning Program</p>
-          <p>Mechanics and electromagnetism taught through visual models and interactive problem sets.</p>
-          <button class="btn btn--ghost btn--sm view-project-btn" data-project="physics">View Project →</button>
-        </div>
-      </div>
-      <div class="book-item tilt-card" data-project="exam">
-        <div class="book-spine"><span>Exam Preparation</span></div>
-        <div class="book-panel">
-          <h3>Exam Preparation System</h3>
-          <p class="book-type">Framework &amp; Resource Pack</p>
-          <p>A structured system covering question technique, timing strategy, and mark-scheme analysis.</p>
-          <button class="btn btn--ghost btn--sm view-project-btn" data-project="exam">View Project →</button>
-        </div>
-      </div>
-      <div class="book-item tilt-card" data-project="organic">
-        <div class="book-spine"><span>Organic Chemistry</span></div>
-        <div class="book-panel">
-          <h3>Organic Chemistry Framework</h3>
-          <p class="book-type">Visual Study Guide</p>
-          <p>Reaction mechanisms mapped visually. Students report a 40% improvement in organic chemistry marks.</p>
-          <button class="btn btn--ghost btn--sm view-project-btn" data-project="organic">View Project →</button>
-        </div>
-      </div>
-      <div class="book-item tilt-card" data-project="thinking">
-        <div class="book-spine"><span>Critical Thinking</span></div>
-        <div class="book-panel">
-          <h3>Critical Thinking in STEM</h3>
-          <p class="book-type">Methodology Paper</p>
-          <p>How to teach students to construct and evaluate mathematical and scientific arguments.</p>
-          <button class="btn btn--ghost btn--sm view-project-btn" data-project="thinking">View Project →</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       FLIPBOOK MODAL
-       Mirrors the react-pageflip / FlipbookViewer
-       approach from the Tutoring System, implemented
-       in vanilla CSS 3D + GSAP (no React needed)
-  ══════════════════════════════════════════ -->
-  <div class="flipbook-overlay" id="flipbook-overlay" aria-modal="true" role="dialog">
-    <div class="flipbook-container" id="flipbook-container">
-
-      <!-- Header bar (mirrors ResourceViewer header) -->
-      <div class="flipbook-header">
-        <div class="flipbook-title-wrap">
-          <span class="flipbook-icon">📖</span>
-          <div>
-            <p class="flipbook-title" id="flipbook-title">Project Title</p>
-            <p class="flipbook-subtitle" id="flipbook-subtitle">Category</p>
-          </div>
-        </div>
-        <button class="flipbook-close" id="flipbook-close" aria-label="Close">✕</button>
-      </div>
-
-      <!-- Open book scene — engine builds slide track here at runtime -->
-      <div class="flipbook-scene" id="flipbook-scene"></div>
-
-      <!-- Controls (mirrors FlipbookViewer controls bar) -->
-      <div class="flipbook-controls">
-        <button class="flipbook-nav-btn" id="flipbook-prev" aria-label="Previous page">‹</button>
-        <span class="flipbook-page-counter" id="flipbook-counter">Spread 1 / 3</span>
-        <button class="flipbook-nav-btn" id="flipbook-next" aria-label="Next page">›</button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       RESOURCES
-  ══════════════════════════════════════════ -->
-  <section id="resources" class="section section--resources">
-    <div class="container">
-      <div class="section-label reveal-text">Library</div>
-      <h2 class="section-title reveal-text">Free Resources</h2>
-      <p class="section-sub reveal-text">Open-access study materials. No sign-up required.</p>
-
-      <div class="resources-search">
-        <input type="text" id="resource-search" placeholder="Search resources..." autocomplete="off" />
-      </div>
-
-      <div class="resources-filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="mathematics">Mathematics</button>
-        <button class="filter-btn" data-filter="physics">Physics</button>
-        <button class="filter-btn" data-filter="exams">Exams</button>
-        <button class="filter-btn" data-filter="beginner">Beginner</button>
-        <button class="filter-btn" data-filter="advanced">Advanced</button>
-      </div>
-
-      <div class="resources-grid" id="resources-grid">
-        <div class="resource-item tilt-card" data-tags="mathematics advanced">
-          <div class="resource-icon">∑</div>
-          <h4>Calculus Formula Sheet</h4>
-          <p>All key differentiation and integration rules in one page.</p>
-          <span class="resource-tag">Mathematics</span>
-          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
-        </div>
-        <div class="resource-item tilt-card" data-tags="physics beginner">
-          <div class="resource-icon">⚛</div>
-          <h4>Physics Equations Reference</h4>
-          <p>A-Level Physics formulae with context and usage notes.</p>
-          <span class="resource-tag">Physics</span>
-          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
-        </div>
-        <div class="resource-item tilt-card" data-tags="exams advanced">
-          <div class="resource-icon">✎</div>
-          <h4>Exam Technique Guide</h4>
-          <p>How to maximise marks using mark-scheme logic.</p>
-          <span class="resource-tag">Exams</span>
-          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
-        </div>
-        <div class="resource-item tilt-card" data-tags="mathematics beginner">
-          <div class="resource-icon">◻</div>
-          <h4>Algebra Fundamentals</h4>
-          <p>Core algebraic techniques from GCSE level upwards.</p>
-          <span class="resource-tag">Mathematics</span>
-          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
-        </div>
-        <div class="resource-item tilt-card" data-tags="physics advanced">
-          <div class="resource-icon">🌊</div>
-          <h4>Waves &amp; Optics Summary</h4>
-          <p>Key concepts, diagrams, and derivations for waves.</p>
-          <span class="resource-tag">Physics</span>
-          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
-        </div>
-        <div class="resource-item tilt-card" data-tags="exams beginner">
-          <div class="resource-icon">📅</div>
-          <h4>Revision Timetable Template</h4>
-          <p>A structured 8-week revision plan with built-in rest periods.</p>
-          <span class="resource-tag">Exams</span>
-          <span class="resource-download resource-download--locked" title="Available to enrolled students only" aria-label="Download available to enrolled students only">🔒 Students Only</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       FAQ
-  ══════════════════════════════════════════ -->
-  <section id="faq" class="section section--faq">
-    <div class="container">
-      <div class="section-label reveal-text">FAQ</div>
-      <h2 class="section-title reveal-text">Common Questions</h2>
-
-      <div class="faq-grid" id="faq-grid">
-        <div class="faq-card" data-index="0">
-          <div class="faq-question">
-            <span class="faq-num">01</span>
-            How do lessons work?
-          </div>
-          <div class="faq-answer">
-            <p>Sessions are 60 or 90 minutes, conducted either in-person (London) or online via an interactive whiteboard. Each session begins with a brief review, moves through new material, and ends with targeted practice.</p>
-          </div>
-        </div>
-        <div class="faq-card" data-index="1">
-          <div class="faq-question">
-            <span class="faq-num">02</span>
-            Do you teach online?
-          </div>
-          <div class="faq-answer">
-            <p>Yes — online sessions are fully interactive using a shared digital whiteboard. Many students prefer this format for its flexibility. Online and in-person sessions are equally effective.</p>
-          </div>
-        </div>
-        <div class="faq-card" data-index="2">
-          <div class="faq-question">
-            <span class="faq-num">03</span>
-            Which age groups do you teach?
-          </div>
-          <div class="faq-answer">
-            <p>Lower Levels, GCSE (Years 10–11) and A-Level / IB (Years 12–13). I also work with university students on foundational maths and physics modules.</p>
-          </div>
-        </div>
-        <div class="faq-card" data-index="3">
-          <div class="faq-question">
-            <span class="faq-num">04</span>
-            How long are sessions?
-          </div>
-          <div class="faq-answer">
-            <p>Standard sessions are 60 minutes. Extended sessions of 90 minutes are available and recommended for exam-intensive periods. Packages of 4, 8, or 12 sessions are also available.</p>
-          </div>
-        </div>
-        <div class="faq-card" data-index="4">
-          <div class="faq-question">
-            <span class="faq-num">05</span>
-            Do you provide homework?
-          </div>
-          <div class="faq-answer">
-            <p>Yes — targeted practice problems are set after every session. These are calibrated to reinforce exactly what was covered. Marked and returned before the next session.</p>
-          </div>
-        </div>
-        <div class="faq-card" data-index="5">
-          <div class="faq-question">
-            <span class="faq-num">06</span>
-            What is your availability?
-          </div>
-          <div class="faq-answer">
-            <p>Intake is intentionally selective to maintain quality. Weekdays and weekends. Spaces are limited — early booking is recommended, especially before exam season.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       BOOKING
-  ══════════════════════════════════════════ -->
-  <section id="booking" class="section section--booking">
-    <div class="container">
-      <div class="section-label reveal-text">Next Step</div>
-      <h2 class="section-title reveal-text">Ready to Begin?</h2>
-      <p class="section-sub reveal-text">Securing your place takes less than two minutes.</p>
-
-      <div class="booking-flow">
-
-        <!-- Step 1 — Your Details -->
-        <div class="booking-step active" data-step="1">
-          <div class="booking-step-num">01</div>
-          <h4>Your Details</h4>
-          <div class="booking-fields">
-            <input type="text"  id="booking-name"  class="booking-select" placeholder="Full name *" required />
-            <input type="email" id="booking-email" class="booking-select" placeholder="Email address *" required />
-            <input type="tel"   id="booking-phone" class="booking-select" placeholder="Phone number (optional)" />
-          </div>
-        </div>
-
-        <div class="booking-arrow">→</div>
-
-        <!-- Step 2 — Subject -->
-        <div class="booking-step" data-step="2">
-          <div class="booking-step-num">02</div>
-          <h4>Choose Subject</h4>
-          <div class="booking-select-wrap">
-            <select id="booking-subject" class="booking-select">
-              <option value="">Select a subject</option>
-              <option>Mathematics</option>
-              <option>Physics</option>
-              <option>Chemistry</option>
-              <option>Computer Science</option>
-              <option>Economics</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="booking-arrow">→</div>
-
-        <!-- Step 3 — Session Type -->
-        <div class="booking-step" data-step="3">
-          <div class="booking-step-num">03</div>
-          <h4>Session Type</h4>
-          <div class="booking-select-wrap">
-            <select id="booking-type" class="booking-select">
-              <option value="">Select type</option>
-              <option>60-minute session</option>
-              <option>90-minute session</option>
-              <option>4-session package</option>
-              <option>8-session package</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="booking-arrow">→</div>
-
-        <!-- Step 4 — Date -->
-        <div class="booking-step" data-step="4">
-          <div class="booking-step-num">04</div>
-          <h4>Choose Date</h4>
-          <input type="date" id="booking-date" class="booking-select" />
-        </div>
-
-        <div class="booking-arrow">→</div>
-
-        <!-- Step 5 — Confirm -->
-        <div class="booking-step" data-step="5">
-          <div class="booking-step-num">05</div>
-          <h4>Confirm</h4>
-          <button class="btn btn--primary btn--lg magnetic" id="booking-submit">
-            Reserve My Place
-          </button>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       BOOKING CONFIRMATION MODAL
-       — shows before mailto opens so student
-         sees exactly what is being sent
-  ══════════════════════════════════════════ -->
-  <div class="booking-modal" id="booking-modal" role="dialog" aria-modal="true" aria-labelledby="bm-title">
-    <div class="booking-modal-card">
-
-      <!-- Email-style header — matches DreamPath session_notification layout -->
-      <div class="bm-header">
-        <div class="bm-logo">Collins Kiragu</div>
-        <p class="bm-logo-sub">Private Tutor &nbsp;·&nbsp; Educator &nbsp;·&nbsp; Mentor</p>
-      </div>
-
-      <!-- Body -->
-      <div class="bm-body">
-        <div class="bm-icon">📅</div>
-
-        <p class="bm-greeting" id="bm-greeting">Hello,</p>
-        <p class="bm-category">SESSION BOOKING REQUEST</p>
-
-        <h2 class="bm-title" id="bm-title">New Tutoring Session Request</h2>
-
-        <p class="bm-intro">
-          Your booking request is ready to send. Please review the details below,
-          then click <strong>Send Booking Request</strong> — your email client will
-          open with everything pre-filled and ready to go.
-        </p>
-
-        <!-- Session details box — mirrors metadata box in session_notification.html.erb -->
-        <div class="bm-details-box">
-          <strong class="bm-details-heading">Session details</strong>
-          <div class="bm-detail-row"><span>Student Name</span>    <strong id="bm-name"></strong></div>
-          <div class="bm-detail-row"><span>Email Address</span>   <strong id="bm-email-val"></strong></div>
-          <div class="bm-detail-row" id="bm-phone-row">
-            <span>Phone</span><strong id="bm-phone-val"></strong>
-          </div>
-          <div class="bm-detail-row"><span>Subject</span>         <strong id="bm-subject-val"></strong></div>
-          <div class="bm-detail-row"><span>Session Type</span>    <strong id="bm-type-val"></strong></div>
-          <div class="bm-detail-row"><span>Preferred Date</span>  <strong id="bm-date-val"></strong></div>
-          <div class="bm-detail-row"><span>Sent</span>            <strong id="bm-timestamp"></strong></div>
-        </div>
-
-        <!-- CTA — opens mailto -->
-        <button class="bm-send-btn" id="bm-send-btn">
-          Send Booking Request →
-        </button>
-
-        <p class="bm-note">
-          Your email client will open with this request pre-filled and addressed to
-          <strong>kiragucollins@gmail.com</strong>. Simply hit send.
-        </p>
-      </div>
-
-      <!-- Footer — mirrors mailer.html.erb footer -->
-      <div class="bm-footer">
-        <p>© 2026 Collins Kiragu · Private Tutor & Educator</p>
-        <p>London &nbsp;·&nbsp; Teaching Globally Online</p>
-      </div>
-
-      <!-- Close -->
-      <button class="bm-close" id="bm-close" aria-label="Close">✕</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       CONTACT
-  ══════════════════════════════════════════ -->
-  <section id="contact" class="section section--contact">
-    <canvas id="contact-canvas"></canvas>
-    <div class="contact-content">
-      <div class="section-label reveal-text">Contact</div>
-      <h2 class="contact-headline reveal-text">Let's build something<br /><em>remarkable.</em></h2>
-      <p class="contact-sub reveal-text">
-        Reach out directly. I respond to all enquiries within 24 hours.
-      </p>
-      <div class="contact-ctas reveal-text">
-        <a href="#booking" class="btn btn--primary magnetic">Book a Lesson</a>
-        <a href="mailto:kiragucollins@gmail.com" class="btn btn--ghost magnetic">Email Me</a>
-      </div>
-      <div class="contact-details reveal-text">
-        <p>kiragucollins@gmail.com</p>
-        <p>Based in London &nbsp;·&nbsp; Teaching Globally Online</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════════
-       FOOTER
-  ══════════════════════════════════════════ -->
-  <footer id="footer" class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <p class="footer-name">Collins Kiragu</p>
-          <p class="footer-tagline">Maths Professor &nbsp;•&nbsp; Tutor &nbsp;•&nbsp; Mentor</p>
-        </div>
-        <div class="footer-links">
-          <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener">YouTube</a>
-        </div>
-        <div class="footer-legal">
-          <p>© 2026 Collins Kiragu</p>
-          <p class="footer-spark" id="footer-spark">Designed to inspire curiosity.</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- AI Tutor Button -->
-  <div class="ai-tutor-btn" id="ai-tutor-btn">
-    <span class="ai-tutor-icon">✦</span>
-    <span class="ai-tutor-label">Ask the Tutor</span>
-  </div>
-  <div class="ai-tutor-panel" id="ai-tutor-panel">
-    <div class="ai-tutor-header">
-      <span>Ask the Tutor</span>
-      <button id="ai-tutor-close">✕</button>
-    </div>
-    <div class="ai-tutor-messages" id="ai-messages">
-      <div class="ai-message ai-message--bot">
-        Hello! I'm here to help you navigate this portfolio and point you toward the right resources. What subject are you working on?
-      </div>
-    </div>
-    <div class="ai-tutor-input-row">
-      <input type="text" id="ai-input" placeholder="Ask a question..." />
-      <button id="ai-send">→</button>
-    </div>
-  </div>
-
-  <script type="module" src="/src/main.js"></script>
+</head>
+
+<body>
+<div id="preload">A story is about to begin…</div>
+
+<div id="ui">
+  <button id="subToggle" title="Toggle captions">CC</button>
+  <div id="captions"></div>
+  <button id="enterBtn">Get to know me</button>
+  <div id="hint">Click to begin</div>
+</div>
+
+<div id="flash"></div>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* =====================================================================
+   SCENE
+   ===================================================================== */
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x050510, 0.014);
+
+const camera = new THREE.PerspectiveCamera(
+  55,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  300
+);
+camera.position.set(0, 0, 15);
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: false,
+  powerPreference: 'high-performance'
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x050510, 1);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+/* =====================================================================
+   LOAD THE 3 DEPTH LAYERS — graceful fallback if images don't exist yet
+   Drop classroom-back.jpg, classroom-mid.jpg, classroom-front.png into
+   public/assets/ and they will be used automatically.
+   ===================================================================== */
+const texLoader = new THREE.TextureLoader();
+
+async function tryLoad(url) {
+  try {
+    const t = await texLoader.loadAsync(url);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    return t;
+  } catch {
+    return null;
+  }
+}
+
+const [texBack, texMid, texFront] = await Promise.all([
+  tryLoad('assets/classroom-back.jpeg'),
+  tryLoad('assets/classroom-mid.jpeg'),
+  tryLoad('assets/classroom-front.png'),
+]);
+
+const hasImages = texBack && texMid && texFront;
+
+/* Fit a plane to the camera frustum at a given depth */
+function planeSizeAtDepth(depth, overshoot = 1.15) {
+  const vFov = (camera.fov * Math.PI) / 180;
+  const height = 2 * Math.tan(vFov / 2) * depth * overshoot;
+  const width  = height * camera.aspect;
+  return { width, height };
+}
+
+/* ── PROCEDURAL FALLBACK ────────────────────────────────────────────────────
+   When no images are present we build a dark, moody classroom-like scene
+   entirely from procedural geometry: layered planes with canvas textures
+   that evoke depth, atmosphere, and the feeling of looking into a room.
+   ─────────────────────────────────────────────────────────────────────── */
+function makeProceduralTex(drawFn, w = 1024, h = 512) {
+  const c   = document.createElement('canvas');
+  c.width   = w; c.height = h;
+  drawFn(c.getContext('2d'), w, h);
+  const t   = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+const proceduralBack = hasImages ? texBack : makeProceduralTex((ctx, W, H) => {
+  // Dark architectural room: back wall with a faint chalkboard glow
+  const bg = ctx.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0,   '#0a0a18');
+  bg.addColorStop(0.6, '#08080f');
+  bg.addColorStop(1,   '#050508');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  // Floor line
+  ctx.strokeStyle = 'rgba(255,211,122,0.06)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, H * 0.72); ctx.lineTo(W, H * 0.72); ctx.stroke();
+
+  // Chalkboard glow on back wall
+  const gb = ctx.createRadialGradient(W/2, H*0.38, 0, W/2, H*0.38, W*0.45);
+  gb.addColorStop(0,   'rgba(120,160,120,0.07)');
+  gb.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = gb; ctx.fillRect(0, 0, W, H);
+
+  // Window light shafts on left
+  const gs = ctx.createLinearGradient(0, 0, W*0.18, H);
+  gs.addColorStop(0,   'rgba(255,211,122,0.06)');
+  gs.addColorStop(1,   'rgba(255,211,122,0)');
+  ctx.fillStyle = gs; ctx.fillRect(0, 0, W*0.18, H);
+
+  // Distant silhouettes of seated students
+  ctx.fillStyle = 'rgba(10,8,20,0.82)';
+  for (let i = 0; i < 9; i++) {
+    const x = 80 + i * 100;
+    const y = H * 0.56;
+    // Head
+    ctx.beginPath();
+    ctx.ellipse(x, y, 14, 18, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Shoulders
+    ctx.beginPath();
+    ctx.ellipse(x, y + 32, 22, 12, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+});
+
+const proceduralMid = hasImages ? texMid : makeProceduralTex((ctx, W, H) => {
+  // Transparent — mid-layer is just a depth separator with soft desks
+  ctx.clearRect(0, 0, W, H);
+
+  // Desk surfaces catching light
+  ctx.fillStyle = 'rgba(255,211,122,0.04)';
+  for (let i = 0; i < 5; i++) {
+    const x = 60 + i * 180;
+    ctx.fillRect(x, H * 0.62, 140, 8);
+  }
+
+  // Mid-ground student silhouettes (larger)
+  ctx.fillStyle = 'rgba(8,7,18,0.75)';
+  for (let i = 0; i < 5; i++) {
+    const x = 120 + i * 185;
+    const y = H * 0.5;
+    ctx.beginPath();
+    ctx.ellipse(x, y, 20, 26, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(x, y + 46, 32, 16, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+});
+
+const proceduralFront = hasImages ? texFront : makeProceduralTex((ctx, W, H) => {
+  // The student in focus — dark silhouette, warm golden halo behind
+  ctx.clearRect(0, 0, W, H);
+
+  // Seat glow — golden warmth pooling around the desk
+  const glow = ctx.createRadialGradient(W/2, H*0.7, 0, W/2, H*0.65, W*0.38);
+  glow.addColorStop(0,   'rgba(255,211,122,0.22)');
+  glow.addColorStop(0.5, 'rgba(255,179,71,0.08)');
+  glow.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+
+  // Desk surface
+  ctx.fillStyle = 'rgba(40,28,10,0.85)';
+  ctx.fillRect(W*0.25, H*0.68, W*0.5, H*0.06);
+
+  // Open book on desk
+  ctx.fillStyle = 'rgba(245,240,220,0.7)';
+  ctx.beginPath();
+  ctx.ellipse(W/2, H*0.7, W*0.14, H*0.04, -0.08, 0, Math.PI*2);
+  ctx.fill();
+
+  // Student body — seated silhouette
+  ctx.fillStyle = 'rgba(12,10,22,0.92)';
+  // Torso
+  ctx.beginPath();
+  ctx.ellipse(W/2, H*0.52, 52, 80, 0, 0, Math.PI*2);
+  ctx.fill();
+  // Head
+  ctx.beginPath();
+  ctx.ellipse(W/2, H*0.3, 38, 48, 0, 0, Math.PI*2);
+  ctx.fill();
+  // Hair
+  ctx.fillStyle = 'rgba(5,4,12,0.95)';
+  ctx.beginPath();
+  ctx.ellipse(W/2, H*0.26, 42, 28, 0, 0, Math.PI);
+  ctx.fill();
+  // Arms
+  ctx.fillStyle = 'rgba(12,10,22,0.88)';
+  ctx.beginPath();
+  ctx.ellipse(W/2-55, H*0.58, 18, 55, 0.3, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(W/2+55, H*0.58, 18, 55, -0.3, 0, Math.PI*2);
+  ctx.fill();
+});
+
+/* ── Build the three depth planes ──────────────────────────────────────── */
+const sizeBack = planeSizeAtDepth(20, 1.25);
+const backMat  = new THREE.MeshBasicMaterial({
+  map: proceduralBack, transparent: true, opacity: 1.0, depthWrite: false
+});
+const backPlane = new THREE.Mesh(
+  new THREE.PlaneGeometry(sizeBack.width, sizeBack.height), backMat
+);
+backPlane.position.z = -20;
+scene.add(backPlane);
+
+const sizeMid = planeSizeAtDepth(10, 1.10);
+const midMat  = new THREE.MeshBasicMaterial({
+  map: proceduralMid, transparent: true, opacity: 1.0, depthWrite: false
+});
+const midPlane = new THREE.Mesh(
+  new THREE.PlaneGeometry(sizeMid.width, sizeMid.height), midMat
+);
+midPlane.position.z = -10;
+scene.add(midPlane);
+
+const sizeFront = planeSizeAtDepth(4, 1.0);
+
+const frontUniforms = {
+  uMap:     { value: proceduralFront },
+  uWarm:    { value: 0.0 },
+  uBright:  { value: 1.0 },
+  uTime:    { value: 0 },
+  uOpacity: { value: 1.0 }
+};
+
+const frontMat = new THREE.ShaderMaterial({
+  uniforms: frontUniforms,
+  transparent: true,
+  depthWrite: false,
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D uMap;
+    uniform float uWarm;
+    uniform float uBright;
+    uniform float uTime;
+    uniform float uOpacity;
+    varying vec2 vUv;
+    void main() {
+      vec4 c = texture2D(uMap, vUv);
+
+      // Golden warm overlay (keeps her greyscale but bathes her in light)
+      vec3 gold = vec3(1.0, 0.827, 0.478);
+      vec3 warmed = mix(c.rgb, c.rgb * gold * 1.35, uWarm);
+
+      // Gentle breathing brightness
+      float breathe = 1.0 + sin(uTime * 0.8) * 0.015;
+
+      vec3 finalColor = warmed * uBright * breathe;
+
+      gl_FragColor = vec4(finalColor, c.a * uOpacity);
+    }
+  `
+});
+
+const frontPlane = new THREE.Mesh(
+  new THREE.PlaneGeometry(sizeFront.width, sizeFront.height),
+  frontMat
+);
+frontPlane.position.z = -4;
+scene.add(frontPlane);
+
+/* =====================================================================
+   HALO — golden 3D glow that grows over her desk
+   ===================================================================== */
+const haloGroup = new THREE.Group();
+haloGroup.position.set(0, -0.4, -3);
+scene.add(haloGroup);
+
+const glowCanvas = document.createElement('canvas');
+glowCanvas.width = glowCanvas.height = 512;
+const gctx = glowCanvas.getContext('2d');
+const grd = gctx.createRadialGradient(256,256,0, 256,256,256);
+grd.addColorStop(0,    'rgba(255,211,122,1)');
+grd.addColorStop(0.25, 'rgba(255,179,71,0.55)');
+grd.addColorStop(0.6,  'rgba(255,140,60,0.15)');
+grd.addColorStop(1,    'rgba(255,120,40,0)');
+gctx.fillStyle = grd;
+gctx.fillRect(0,0,512,512);
+const glowTex = new THREE.CanvasTexture(glowCanvas);
+
+const glowSprite = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: glowTex,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  opacity: 0
+}));
+glowSprite.scale.set(14, 14, 1);
+haloGroup.add(glowSprite);
+
+/* =====================================================================
+   AMBIENT PARTICLES — floating dust / sparks
+   ===================================================================== */
+const particleCount = 260;
+const positions = new Float32Array(particleCount * 3);
+const velocities = new Float32Array(particleCount);
+const sizes = new Float32Array(particleCount);
+
+for (let i = 0; i < particleCount; i++) {
+  positions[i*3+0] = (Math.random() - 0.5) * 40;
+  positions[i*3+1] = (Math.random() - 0.5) * 24 - 2;
+  positions[i*3+2] = (Math.random() - 0.5) * 20 - 6;
+  velocities[i] = 0.004 + Math.random() * 0.012;
+  sizes[i] = 0.03 + Math.random() * 0.08;
+}
+
+const pGeo = new THREE.BufferGeometry();
+pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+pGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+const pMat = new THREE.ShaderMaterial({
+  uniforms: {
+    uTime: { value: 0 },
+    uColor: { value: new THREE.Color(0xFFD37A) }
+  },
+  vertexShader: `
+    attribute float size;
+    varying float vAlpha;
+    uniform float uTime;
+    void main() {
+      vec3 p = position;
+      p.y += sin(uTime * 0.6 + position.x * 0.3) * 0.15;
+      p.x += cos(uTime * 0.4 + position.y * 0.3) * 0.15;
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
+      gl_PointSize = size * (300.0 / -mv.z);
+      gl_Position = projectionMatrix * mv;
+      vAlpha = smoothstep(40.0, 5.0, -mv.z);
+    }
+  `,
+  fragmentShader: `
+    uniform vec3 uColor;
+    varying float vAlpha;
+    void main() {
+      float d = length(gl_PointCoord - vec2(0.5));
+      float a = smoothstep(0.5, 0.0, d);
+      gl_FragColor = vec4(uColor, a * vAlpha * 0.7);
+    }
+  `,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+
+const particles = new THREE.Points(pGeo, pMat);
+scene.add(particles);
+
+/* =====================================================================
+   MOUSE
+   ===================================================================== */
+const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+window.addEventListener('mousemove', (e) => {
+  mouse.tx = (e.clientX / window.innerWidth  - 0.5) * 2;
+  mouse.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+});
+window.addEventListener('touchmove', (e) => {
+  const t = e.touches[0];
+  mouse.tx = (t.clientX / window.innerWidth  - 0.5) * 2;
+  mouse.ty = (t.clientY / window.innerHeight - 0.5) * 2;
+}, { passive: true });
+
+/* =====================================================================
+   THE STORY SCRIPT — 46 seconds, no audio
+   Timings are in seconds from when the user clicks the button.
+   ===================================================================== */
+const SCRIPT = [
+  { t: 2.0,  who:'student', line:"I'm here every day." },
+  { t: 4.5,  who:'student', line:"Same seat. Same notebook. Same silence." },
+  { t: 7.0,  who:'student', line:"I answer every question… in my head. Out loud, I disappear." },
+
+  { t: 10.5, who:'tutor',   line:"I see you.",                                         halo:0.7 },
+  { t: 12.5, who:'student', line:"You don't have to say that. I know what I am." },
+  { t: 15.5, who:'tutor',   line:"Then tell me. What are you?" },
+  { t: 17.5, who:'student', line:"The one who's always almost. Almost ready. Almost good enough. Almost seen." },
+
+  { t: 21.0, who:'tutor',   line:"Almost is not 'never.' And 'not yet' is not 'not ever.'", warm:0.2 },
+  { t: 24.0, who:'student', line:"You don't understand —" },
+  { t: 25.5, who:'tutor',   line:"I do. I've taught hundreds like you. Not one was foolish. Not one was too late.", warm:0.35, halo:1.0 },
+  { t: 29.0, who:'tutor',   line:"They were just minds no one had walked with yet.",       warm:0.5,  halo:1.4 },
+
+  { t: 32.0, who:'student', line:"…Walk with me, then.",                                    warm:0.65, halo:1.8 },
+  { t: 34.0, who:'tutor',   line:"I already am.",                                           warm:0.75, halo:2.2 },
+  { t: 36.5, who:'tutor',   line:"You are not behind. You are beginning.",                  warm:0.85, halo:2.8, bright:1.15 },
+  { t: 39.0, who:'student', line:"Then watch me begin.",                                    warm:0.9,  halo:3.5, bright:1.25 },
+
+  { t: 42.0, who:'student', line:"I was never less than them. I was just waiting to be lit.", warm:1.0, halo:5.0, bright:1.4, warp:true },
+  { t: 45.0, who:'student', line:"And now? I burn brighter than the ones who never had to wait." }
+];
+
+const WARP_AT          = 46.5;  // seconds — camera plunges
+const PAGE_CHANGE_AT   = 49.0;  // seconds — navigate to portfolio.html
+
+/* =====================================================================
+   UI ELEMENTS
+   ===================================================================== */
+const captionsEl = document.getElementById('captions');
+const enterBtn   = document.getElementById('enterBtn');
+const hint       = document.getElementById('hint');
+const subToggle  = document.getElementById('subToggle');
+let subtitlesOn  = true;
+let playing      = false;
+let currentCaption = null;
+
+subToggle.addEventListener('click', () => {
+  subtitlesOn = !subtitlesOn;
+  subToggle.classList.toggle('off', !subtitlesOn);
+  if (!subtitlesOn && currentCaption) currentCaption.classList.remove('show');
+});
+
+/* =====================================================================
+   ANIMATED SHADER STATE
+   ===================================================================== */
+const shaderState = {
+  warm:   { current: 0.0, target: 0.0 },
+  bright: { current: 1.0, target: 1.0 },
+  halo:   { current: 0.0, target: 0.0 }
+};
+function setTarget(key, value) {
+  if (shaderState[key]) shaderState[key].target = value;
+}
+
+/* =====================================================================
+   CAPTION DISPLAY
+   ===================================================================== */
+function showCaption(who, line) {
+  if (!subtitlesOn) return;
+  if (currentCaption) {
+    currentCaption.classList.remove('show');
+    const old = currentCaption;
+    setTimeout(() => old.remove(), 1100);
+  }
+  const el = document.createElement('div');
+  el.className = 'caption ' + (who === 'tutor' ? 'tutor' : 'student');
+  el.innerHTML = `<span class="who">${who === 'tutor' ? 'The Tutor' : 'The Student'}</span>${line}`;
+  captionsEl.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  currentCaption = el;
+}
+
+/* =====================================================================
+   START THE STORY
+   ===================================================================== */
+function startStory() {
+  if (playing) return;
+  playing = true;
+
+  enterBtn.classList.add('hidden');
+  setTimeout(() => hint.classList.add('show'), 400);
+  setTimeout(() => hint.classList.remove('show'), 3200);
+
+  SCRIPT.forEach(entry => {
+    setTimeout(() => {
+      showCaption(entry.who, entry.line);
+      if (typeof entry.warm   === 'number') setTarget('warm',   entry.warm);
+      if (typeof entry.bright === 'number') setTarget('bright', entry.bright);
+      if (typeof entry.halo   === 'number') setTarget('halo',   entry.halo);
+    }, entry.t * 1000);
+  });
+
+  // Final warp
+  setTimeout(() => {
+    document.body.classList.add('warping');
+  }, WARP_AT * 1000);
+
+  // Hand off to portfolio
+  setTimeout(() => {
+    window.location.href = 'portfolio.html';
+  }, PAGE_CHANGE_AT * 1000);
+}
+
+enterBtn.addEventListener('click', startStory);
+
+enterBtn.addEventListener('mousemove', (e) => {
+  const r = enterBtn.getBoundingClientRect();
+  const x = ((e.clientX - r.left) / r.width  - 0.5) * 8;
+  const y = ((e.clientY - r.top)  / r.height - 0.5) * 6;
+  enterBtn.style.transform = `translateX(-50%) translate(${x}px, ${y}px)`;
+});
+enterBtn.addEventListener('mouseleave', () => {
+  enterBtn.style.transform = 'translateX(-50%)';
+});
+
+// Enter key also starts
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !playing) startStory();
+});
+
+/* =====================================================================
+   ANIMATION LOOP
+   ===================================================================== */
+const clock = new THREE.Clock();
+let warping = false;
+let warpT = 0;
+
+function easeInCubic(x) {
+  x = Math.min(Math.max(x, 0), 1);
+  return x * x * x;
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  const t  = clock.elapsedTime;
+
+  warping = document.body.classList.contains('warping');
+  if (warping) warpT = Math.min(warpT + dt, 1.6);
+
+  // Smooth the shader values
+  ['warm','bright','halo'].forEach(k => {
+    shaderState[k].current += (shaderState[k].target - shaderState[k].current) * 0.03;
+  });
+  frontUniforms.uWarm.value   = shaderState.warm.current;
+  frontUniforms.uBright.value = shaderState.bright.current;
+  frontUniforms.uTime.value   = t;
+
+  // Mouse smoothing
+  mouse.x += (mouse.tx - mouse.x) * 0.05;
+  mouse.y += (mouse.ty - mouse.y) * 0.05;
+
+  // Camera — idle drift + mouse parallax + warp plunge
+  const idleX = Math.sin(t * 0.15) * 0.4;
+  const idleY = Math.cos(t * 0.12) * 0.25;
+  let targetX = idleX + mouse.x * 0.9;
+  let targetY = idleY + mouse.y * 0.6;
+  let targetZ = 15;
+
+  if (warping) {
+    const e = easeInCubic(warpT / 1.6);
+    targetZ = 15 - e * 34;
+    targetX *= (1 - e);
+    targetY *= (1 - e);
+  }
+
+  camera.position.x += (targetX - camera.position.x) * 0.06;
+  camera.position.y += (targetY - camera.position.y) * 0.06;
+  camera.position.z += (targetZ - camera.position.z) * (warping ? 0.05 : 0.08);
+  camera.lookAt(0, 0, -6);
+
+  // Plane parallax (each at its own rate → true depth)
+  const px = mouse.x * 0.6;
+  const py = mouse.y * 0.4;
+
+  backPlane.position.x  = -px * 0.4  + Math.sin(t * 0.10) * 0.15;
+  backPlane.position.y  = -py * 0.3  + Math.cos(t * 0.10) * 0.10;
+
+  midPlane.position.x   = -px * 0.9  + Math.sin(t * 0.13) * 0.20;
+  midPlane.position.y   = -py * 0.7  + Math.cos(t * 0.13) * 0.15;
+
+  frontPlane.position.x = -px * 1.4  + Math.sin(t * 0.16) * 0.25;
+  frontPlane.position.y = -py * 1.1  + Math.cos(t * 0.16) * 0.20;
+
+  // During warp, push planes outward
+  if (warping) {
+    const e = easeInCubic(warpT / 1.6);
+    backPlane.position.z  = -20 - e * 22;
+    midPlane.position.z   = -10 + e * 16;
+    frontPlane.position.z = -4  + e * 24;
+
+    backPlane.scale.setScalar(1 + e * 0.8);
+    midPlane.scale.setScalar(1 + e * 0.5);
+    frontPlane.scale.setScalar(1 + e * 0.3);
+
+    backMat.opacity  = 1.0 * (1 - e);
+    midMat.opacity   = 1.0 * (1 - e);
+    frontUniforms.uOpacity.value = 1.0 * (1 - e * 0.6);
+  }
+
+  // Halo
+  const h = shaderState.halo.current;
+  glowSprite.material.opacity = Math.min(h * 0.18, 0.7);
+  glowSprite.scale.setScalar(10 + h * 2.5);
+  const breathe = 1 + Math.sin(t * 1.2) * 0.04;
+  haloGroup.scale.setScalar(breathe * (1 + h * 0.15));
+
+  // Particles
+  pMat.uniforms.uTime.value = t;
+  const posArr = pGeo.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    posArr[i*3+1] += velocities[i] * (0.6 + h * 0.8);
+    if (posArr[i*3+1] > 14) {
+      posArr[i*3+1] = -14;
+      posArr[i*3+0] = (Math.random() - 0.5) * 40;
+      posArr[i*3+2] = (Math.random() - 0.5) * 20 - 6;
+    }
+  }
+  pGeo.attributes.position.needsUpdate = true;
+
+  if (warping) {
+    const e = easeInCubic(warpT / 1.6);
+    pMat.uniforms.uColor.value.setRGB(1, 0.83 + e * 0.17, 0.48 + e * 0.4);
+    particles.rotation.z += dt * e * 1.5;
+  }
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+/* =====================================================================
+   RESIZE
+   ===================================================================== */
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const sBack = planeSizeAtDepth(20, 1.25);
+  backPlane.geometry.dispose();
+  backPlane.geometry = new THREE.PlaneGeometry(sBack.width, sBack.height);
+
+  const sMid = planeSizeAtDepth(10, 1.10);
+  midPlane.geometry.dispose();
+  midPlane.geometry = new THREE.PlaneGeometry(sMid.width, sMid.height);
+
+  const sFront = planeSizeAtDepth(4, 1.0);
+  frontPlane.geometry.dispose();
+  frontPlane.geometry = new THREE.PlaneGeometry(sFront.width, sFront.height);
+});
+
+/* =====================================================================
+   PRELOADER
+   ===================================================================== */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preload').classList.add('gone');
+  }, 900);
+});
+</script>
 </body>
 </html>

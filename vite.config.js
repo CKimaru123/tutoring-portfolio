@@ -6,17 +6,16 @@ export default defineConfig({
   base: '/tutoring-portfolio/',
 
   server: {
-    // Open landing.html automatically when `npm run dev` runs
-    open: '/tutoring-portfolio/landing.html',
+    // Open the landing (now index.html) automatically when `npm run dev` runs.
+    // /tutoring-portfolio/ resolves to index.html — no explicit filename needed.
+    open: '/tutoring-portfolio/',
   },
 
-  // Declare both HTML pages so Vite bundles them correctly.
-  // landing.html is the entry point; index.html is the portfolio.
   build: {
     rollupOptions: {
       input: {
-        main:      'landing.html',   // ← entry point (served at /tutoring-portfolio/)
-        portfolio: 'index.html',     // ← portfolio (navigated to from landing)
+        main:      'index.html',      // ← landing / entry point (was landing.html)
+        portfolio: 'portfolio.html',  // ← 3D portfolio (was index.html)
       },
     },
   },
