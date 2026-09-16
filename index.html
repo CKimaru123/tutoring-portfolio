@@ -244,6 +244,113 @@
     background: rgba(255,211,122,0.1);
   }
   #subToggle.off { opacity: 0.4; }
+
+  /* ============================================================
+     RESPONSIVE — MOBILE & TABLET
+     Tested breakpoints:
+       480px  — small phones (iPhone SE, Galaxy A)
+       640px  — mid phones   (iPhone 14, Pixel)
+       768px  — large phones / small tablets in portrait
+     ============================================================ */
+
+  /* ── All touch / narrow screens (≤ 768px) ──────────────────── */
+  @media (max-width: 768px) {
+
+    /* Captions: bigger text, higher position so button doesn't overlap */
+    #captions {
+      bottom: 28vh;
+      width: 92vw;
+    }
+
+    .caption {
+      /* clamp: min 1rem, preferred 4.2vw, max 1.55rem */
+      font-size: clamp(1rem, 4.2vw, 1.55rem);
+      line-height: 1.55;
+      padding: 0 0.5rem;
+    }
+
+    .caption .who {
+      font-size: 0.6rem;
+      letter-spacing: 0.32em;
+      margin-bottom: 0.55rem;
+    }
+
+    /* Enter button: smaller padding, tighter letter-spacing */
+    #enterBtn {
+      bottom: 12vh;
+      padding: 1rem 2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.22em;
+      /* Disable the mouse-magnetic transform on touch — it breaks tap */
+      transform: translateX(-50%) !important;
+    }
+
+    /* Hint: move up slightly so it's above the safe area */
+    #hint {
+      bottom: 7vh;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+    }
+
+    /* CC toggle: larger tap target */
+    #subToggle {
+      top: 1rem;
+      right: 1rem;
+      padding: 0.55rem 1rem;
+      font-size: 0.6rem;
+    }
+
+    /* Preloader text: smaller on narrow screens */
+    #preload {
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+    }
+  }
+
+  /* ── Very small phones (≤ 480px) ───────────────────────────── */
+  @media (max-width: 480px) {
+
+    #captions {
+      bottom: 30vh;
+      width: 94vw;
+    }
+
+    .caption {
+      font-size: clamp(0.95rem, 4.5vw, 1.35rem);
+    }
+
+    #enterBtn {
+      bottom: 14vh;
+      padding: 0.9rem 1.6rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+    }
+
+    #hint {
+      bottom: 8vh;
+      font-size: 0.58rem;
+    }
+  }
+
+  /* ── Landscape phones (short viewport height ≤ 430px) ──────── */
+  @media (max-height: 430px) {
+
+    #captions {
+      bottom: 24vh;
+    }
+
+    .caption {
+      font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+    }
+
+    #enterBtn {
+      bottom: 8vh;
+      padding: 0.75rem 1.4rem;
+      font-size: 0.76rem;
+    }
+
+    #hint { display: none; } /* not enough room in landscape */
+  }
 </style>
 </head>
 
@@ -730,14 +837,19 @@ function startStory() {
 }
 
 enterBtn.addEventListener('click', startStory);
+// Immediate response on touch — no 300ms delay
+enterBtn.addEventListener('touchend', (e) => { e.preventDefault(); startStory(); });
 
 enterBtn.addEventListener('mousemove', (e) => {
+  // Disable magnetic effect on touch devices — it permanently offsets the button
+  if (window.matchMedia('(pointer: coarse)').matches) return;
   const r = enterBtn.getBoundingClientRect();
   const x = ((e.clientX - r.left) / r.width  - 0.5) * 8;
   const y = ((e.clientY - r.top)  / r.height - 0.5) * 6;
   enterBtn.style.transform = `translateX(-50%) translate(${x}px, ${y}px)`;
 });
 enterBtn.addEventListener('mouseleave', () => {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
   enterBtn.style.transform = 'translateX(-50%)';
 });
 
