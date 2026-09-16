@@ -10,7 +10,25 @@
   <link rel="stylesheet" href="/src/styles/main.css" />
 </head>
 <body>
+  <!-- ============ ARRIVAL FROM LANDING PAGE ============ -->
+<div id="arrivalFlash"></div>
 
+<style>
+  #arrivalFlash {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 55%, #fff 0%, #FFD37A 30%, #FFB347 55%, transparent 80%);
+    animation: arrivalFade 2.0s ease-out forwards;
+  }
+  @keyframes arrivalFade {
+    0%   { opacity: 1; }
+    70%  { opacity: 0.3; }
+    100% { opacity: 0; }
+  }
+</style>
+<!-- ============ END ARRIVAL ============ -->
   <!-- Custom Cursor — COMMENTED OUT, using browser default cursor instead
   <div id="cursor">
     <div class="cursor-dot"></div>
